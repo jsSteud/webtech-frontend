@@ -1,8 +1,8 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
+<nav>
+    <router-link to="/">Mein Trainingsplan</router-link> |
+    <router-link to="/getall">Alle Übungen</router-link>
+</nav>
   <router-view/>
 </template>
 
@@ -11,20 +11,27 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
+}
 nav {
-  padding: 30px;
+    padding: 20px;
+    text-align: center;
+    background-color: #E0D26C;
+    ;
 }
 
 nav a {
-  font-weight: bold;
-  color: #2c3e50;
+    font-weight: bold;
+    color: #2c3e50;
+    text-decoration: none;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+    color: #6c7ae0;
 }
+
+body{
+    margin: 0;
+}
+
 </style>
