@@ -1,6 +1,7 @@
 <template>
     <div class="content_startView">
-       <h1 class="welcomeHeader">Mein Trainingplan</h1>
+       <h1 class="welcomeHeader">Meine <span style="color:#4f9b8f;">Ziele. </span></h1>
+        <h1 class="welcomeHeader">Mein <span style="color:#4f9b8f;">Trainingsplan. </span></h1>
         <TrainingsPlan :exercises="this.exercises"></TrainingsPlan>
     </div>
 </template>
@@ -19,6 +20,7 @@ export default {
         }
     },
     mounted () {
+
         const endpoint = 'http://localhost:8081/allsessions';
         const requestOptions = {
             method: 'GET',
@@ -36,8 +38,11 @@ export default {
 </script>
 
 <style>
+
+
 .welcomeHeader{
-margin-left: 5vw;
+    color: white;
+    margin-left: 20vw;
 }
 
 .content_startView{
@@ -46,6 +51,7 @@ margin-left: 5vw;
 
 body{
     background-size: cover;
-    background-color: #c4d3f6;
+    background-color: black;
+
 }
 </style>

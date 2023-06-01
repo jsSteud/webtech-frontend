@@ -39,7 +39,7 @@ name: 'AllView',
 
 <style>
 .header{
-    margin-left: 5vw;
+    margin-left: 19vw;
 }
 
 .test{

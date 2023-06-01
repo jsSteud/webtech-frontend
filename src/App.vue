@@ -1,14 +1,16 @@
 <template>
 <nav>
-    <router-link to="/">Mein Trainingsplan</router-link> |
+    <router-link to="/">Mein Trainingsplan | </router-link>
     <router-link to="/getall">Alle Übungen</router-link>
 </nav>
   <router-view/>
 </template>
 
 <style>
+
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan&display=swap');
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-family: 'League Spartan', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -16,18 +18,19 @@
 nav {
     padding: 20px;
     text-align: center;
-    background-color: #E0D26C;
-    ;
+    font-size: 120%;
+    /*background-color: white;*/
+
 }
 
 nav a {
     font-weight: bold;
-    color: #2c3e50;
+    color: #d6d6d6;
     text-decoration: none;
 }
 
 nav a.router-link-exact-active {
-    color: #6c7ae0;
+    color: #4f9b8f;
 }
 
 body{
