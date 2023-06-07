@@ -1,7 +1,8 @@
 <template>
 <nav>
     <router-link to="/">Mein Trainingsplan | </router-link>
-    <router-link to="/getall">Alle Übungen</router-link>
+    <router-link to="/getall">Alle Übungen | </router-link>
+    <router-link to="/createnew">Neue Übung</router-link>
 </nav>
   <router-view/>
 </template>
@@ -9,6 +10,8 @@
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan&display=swap');
+
+
 #app {
     font-family: 'League Spartan', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -38,3 +41,5 @@ body{
 }
 
 </style>
+<script setup>
+</script>

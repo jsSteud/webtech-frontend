@@ -1,8 +1,8 @@
 <template>
-    <button class="btnTemp" @click="edit()" v-on:click="hidden = false" v-if="hidden">Trainingsplan bearbeiten</button>
+    <button class="btnTemp" @click="edit()" v-if="hidden">Trainingsplan bearbeiten</button>
     <div class="btnDiv">
-        <button id="bestatigen" v-on:click="hidden = true" v-if="!hidden">Bestätigen </button>
-        <button id="abbrechen" @click="abbrechen()" v-on:click="hidden = true" v-if="!hidden">Abbrechen</button>
+        <button id="bestatigen" @click="bestatigen()"  v-if="!hidden">Bestätigen </button>
+        <button id="abbrechen" @click="abbrechen()"  v-if="!hidden">Abbrechen</button>
     </div>
 
   <div>
@@ -26,18 +26,21 @@
               <td class="6" v-on:click="color(this.uniqueId(6, index))" :id="uniqueId(6, index)">{{days(exercises)[6][index]}}</td>
           </tr>
 
-          <tr v-if="!hidden" class="createNewBtns">
-              <td><i class="gg-add"></i></td>
-              <td><i class="gg-add"></i></td>
-              <td><i class="gg-add"></i></td>
-              <td><i class="gg-add"></i></td>
-              <td><i class="gg-add"></i></td>
-              <td><i class="gg-add"></i></td>
-              <td><i class="gg-add"></i></td>
-
+          <tr v-if="!hidden " class="createNewBtns">
+              <td v-for="index in 7" :key="index" :id="index">
+                  <router-link :to="routPath(index)">
+                      <i class="gg-add"></i>
+                  </router-link>
+              </td>
           </tr>
 
       </table>
+
+      <div v-if="!hidden && !disclaimerBtnHidden" class="disclaimer">
+          <i class="gg-info" style="margin: auto"></i>
+          <p>Klicke auf Übungen um sie zum Löschen zu markieren. Über das '+' kannst du neue Übungen hinzufügen. Bestätige oben rechts deinen neuen Plan.</p>
+          <i class="gg-close" style="cursor:pointer;" @click="disclaimerBtnHidden = true"></i>
+      </div>
 
   </div>
 </template>
@@ -51,15 +54,20 @@ export default {
     data(){
         return {
             hidden: true,
+            disclaimerBtnHidden: true,
             id: ''
         }
     },
-props: {
+    props: {
     exercises: {
         type: Array,
             required: true
     }
-}, methods: {
+},
+    methods: {
+        routPath(index){
+        return "/addtoplan/" + index;
+        },
         uniqueId(day, index){
 
             let dayString = day.toString();
@@ -110,10 +118,17 @@ props: {
 
         },
         abbrechen(){
-            location.reload();
+            this.hidden = true;
+            this.disclaimerBtnHidden = true
         },
         edit(){
+            this.hidden = false;
+            this.disclaimerBtnHidden = false;
             document.getElementsByClassName("training_table").item(0).style.cursor = "pointer";
+        },
+        bestatigen(){
+            this.hidden = true;
+            this.disclaimerBtnHidden = true
         }
     }
 
@@ -125,6 +140,20 @@ props: {
 @import url('https://css.gg/css');
 
 
+.disclaimer{
+    margin-top: 4vh;
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    height: auto;
+    max-width: 70vw;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: cornflowerblue;
+    color: white;
+    border-radius: 3px;
+
+}
 
 
 .gg-add{
@@ -138,7 +167,7 @@ props: {
     border: 1px solid #4f9b8f;
     color: white;
     border-radius: 20px;
-    font-size: 1.2vh;
+    font-size: 1.5vh;
     margin-left: 70vw;
     cursor: pointer;
 
