@@ -1,3 +1,6 @@
+<!--
+TODO: Base URLS in ENV VAR-->
+
 <template>
 <nav>
     <router-link to="/">Mein Trainingsplan | </router-link>

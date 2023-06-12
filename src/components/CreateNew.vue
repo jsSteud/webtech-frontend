@@ -13,7 +13,7 @@
 
         <h4>Möchtest du die Übung direkt einplanen?</h4>
         <label><input type="checkbox" name="" id="mo" v-model="mo">Montag</label>
-        <label><input type="checkbox" name="" id="die" v-model="die">Dienstag</label>
+        <label><input type="checkbox" name="" id="die" v-model="di">Dienstag</label>
         <label><input type="checkbox" name="" id="mi" v-model="mi">Mittwoch</label>
         <label><input type="checkbox" name="" id="do" v-model="don">Donnerstag</label>
         <label><input type="checkbox" name="" id="fr" v-model="fr">Freitag</label>
@@ -31,7 +31,7 @@
         </select>
 
         <h4>Hast du ein zusätzlichen Kommentar?</h4>
-        <input type="text" name="" id="" placeholder="Kommentar" style="height: 10vh; width: 20vw"><br>
+        <input type="text" name="" id="" placeholder="Kommentar" style="height: 10vh; width: 20vw" v-model="comment"><br>
 
         <button class="safeBtn" v-if="changed" @click="safe()">Speichern und zurück zur Übersicht</button>
     </div>
@@ -68,8 +68,9 @@ export default {
             console.log(this.name)
             console.log(this.machine)
             console.log(this.weight)
+            console.log(this.comment)
             console.log(this.mo)
-            console.log(this.die)
+            console.log(this.di)
             console.log(this.mi)
             console.log(this.don)
             console.log(this.fr)
@@ -104,7 +105,7 @@ export default {
                     weight: this.weight,
                     comment: this.comment,
                     mo: this.mo,
-                    die: this.die,
+                    di: this.di,
                     mi: this.mi,
                     don: this.don,
                     fr: this.fr,
@@ -128,6 +129,8 @@ export default {
                     console.log('Success:', data)
                 })
                 .catch(error => console.log('error', error))
+
+            window.location = "http://localhost:8080"
         }
         }
 

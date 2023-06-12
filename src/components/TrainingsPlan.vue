@@ -16,14 +16,25 @@
               <th>Samstag</th>
               <th id="topRight">Sonntag</th>
           </tr>
+<!--          <tr v-for="(day, index) in days(exercises)" :key="day.id">-->
+<!--              <td class="0" v-on:click="color(this.uniqueId(0, index))" :id="uniqueId(0, index)">{{days(exercises)[0][index]}}</td>-->
+<!--              <td class="1" v-on:click="color(this.uniqueId(1, index))" :id="uniqueId(1, index)">{{days(exercises)[1][index]}}</td>-->
+<!--              <td class="2" v-on:click="color(this.uniqueId(2, index))" :id="uniqueId(2, index)">{{days(exercises)[2][index]}}</td>-->
+<!--              <td class="3" v-on:click="color(this.uniqueId(3, index))" :id="uniqueId(3, index)">{{days(exercises)[3][index]}}</td>-->
+<!--              <td class="4" v-on:click="color(this.uniqueId(4, index))" :id="uniqueId(4, index)">{{days(exercises)[4][index]}}</td>-->
+<!--              <td class="5" v-on:click="color(this.uniqueId(5, index))" :id="uniqueId(5, index)">{{days(exercises)[5][index]}}</td>-->
+<!--              <td class="6" v-on:click="color(this.uniqueId(6, index))" :id="uniqueId(6, index)">{{days(exercises)[6][index]}}</td>-->
+<!--          </tr>-->
+
           <tr v-for="(day, index) in days(exercises)" :key="day.id">
-              <td class="0" v-on:click="color(this.uniqueId(0, index))" :id="uniqueId(0, index)">{{days(exercises)[0][index]}}</td>
-              <td class="1" v-on:click="color(this.uniqueId(1, index))" :id="uniqueId(1, index)">{{days(exercises)[1][index]}}</td>
-              <td class="2" v-on:click="color(this.uniqueId(2, index))" :id="uniqueId(2, index)">{{days(exercises)[2][index]}}</td>
-              <td class="3" v-on:click="color(this.uniqueId(3, index))" :id="uniqueId(3, index)">{{days(exercises)[3][index]}}</td>
-              <td class="4" v-on:click="color(this.uniqueId(4, index))" :id="uniqueId(4, index)">{{days(exercises)[4][index]}}</td>
-              <td class="5" v-on:click="color(this.uniqueId(5, index))" :id="uniqueId(5, index)">{{days(exercises)[5][index]}}</td>
-              <td class="6" v-on:click="color(this.uniqueId(6, index))" :id="uniqueId(6, index)">{{days(exercises)[6][index]}}</td>
+<!--              td-id is combination from day number and db-id-->
+              <td class="0" v-on:click="color(createId(0, uniqueId(exercises)[0][index]))" :id="createId(0, uniqueId(exercises)[0][index])">{{days(exercises)[0][index]}}</td>
+              <td class="1" v-on:click="color(createId(1, uniqueId(exercises)[1][index]))" :id="createId(1, uniqueId(exercises)[1][index])">{{days(exercises)[1][index]}}</td>
+              <td class="2" v-on:click="color(createId(2, uniqueId(exercises)[2][index]))" :id="createId(2, uniqueId(exercises)[2][index])">{{days(exercises)[2][index]}}</td>
+              <td class="3" v-on:click="color(createId(3, uniqueId(exercises)[3][index]))" :id="createId(3, uniqueId(exercises)[3][index])">{{days(exercises)[3][index]}}</td>
+              <td class="4" v-on:click="color(createId(4, uniqueId(exercises)[4][index]))" :id="createId(4, uniqueId(exercises)[4][index])">{{days(exercises)[4][index]}}</td>
+              <td class="5" v-on:click="color(createId(5, uniqueId(exercises)[5][index]))" :id="createId(5, uniqueId(exercises)[5][index])">{{days(exercises)[5][index]}}</td>
+              <td class="6" v-on:click="color(createId(6, uniqueId(exercises)[6][index]))" :id="createId(6, uniqueId(exercises)[6][index])">{{days(exercises)[6][index]}}</td>
           </tr>
 
           <tr v-if="!hidden " class="createNewBtns">
@@ -47,6 +58,7 @@
 
 <script>
 
+
 var arrClicked = [];
 
 export default {
@@ -55,7 +67,16 @@ export default {
         return {
             hidden: true,
             disclaimerBtnHidden: true,
-            id: ''
+            id: '',
+            mo: false,
+            di: false,
+            mi: false,
+            don: false,
+            fr: false,
+            sa: false,
+            so: false,
+            planed: false,
+            exercisesChangable: this.exercises
         }
     },
     props: {
@@ -67,13 +88,31 @@ export default {
     methods: {
         routPath(index){
         return "/addtoplan/" + index;
+        }, createId(day ,id){
+            return day + "_" + id;
         },
-        uniqueId(day, index){
+        uniqueId(exercises){
 
-            let dayString = day.toString();
-            let indexString = index.toString();
-            let connect = dayString + indexString;
-            return connect;
+            var monday = [];
+            var tuesday = [];
+            var wednesday = [];
+            var thursday = [];
+            var friday = [];
+            var saturday = [];
+            var sunday = [];
+
+            for (let i = 0; i < exercises.length; i++) {
+                if(exercises[i].mo) monday.push(exercises[i].id);
+                if(exercises[i].di) tuesday.push(exercises[i].id);
+                if(exercises[i].mi) wednesday.push(exercises[i].id);
+                if(exercises[i].don) thursday.push(exercises[i].id);
+                if(exercises[i].fr) friday.push(exercises[i].id);
+                if(exercises[i].sa) saturday.push(exercises[i].id);
+                if(exercises[i].so) sunday.push(exercises[i].id);
+            }
+            var week = [monday, tuesday, wednesday, thursday, friday, saturday, sunday];
+            return week;
+
             },
         days(exercises){
             var monday = [];
@@ -126,13 +165,101 @@ export default {
             this.disclaimerBtnHidden = false;
             document.getElementsByClassName("training_table").item(0).style.cursor = "pointer";
         },
-        bestatigen(){
+        bestatigen() {
+            console.log(arrClicked)
+
+            for (let i = 0; i < arrClicked.length; i++) {
+
+                var  db_id = arrClicked[i].slice(2);
+                var day_id = arrClicked[i].slice(0, 1);
+                var index;
+
+                for (let j = 0; j < this.exercisesChangable.length; j++) {
+                    if (this.exercisesChangable[j].id == db_id) {
+                        index = j;
+                        console.log(this.exercisesChangable[j])
+                        this.mo = this.exercisesChangable[j].mo;
+                        this.di = this.exercisesChangable[j].di;
+                        this.mi = this.exercisesChangable[j].mi;
+                        this.don = this.exercisesChangable[j].don;
+                        this.fr = this.exercisesChangable[j].fr;
+                        this.sa = this.exercisesChangable[j].sa;
+                        this.so = this.exercisesChangable[j].so;
+                    }
+                }
+
+                if(day_id == 0) {
+                    this.mo = false;
+                    this.exercisesChangable[index].mo = false;
+                }
+                else if(day_id == 1) {
+                    this.di = false;
+                    this.exercisesChangable[index].di = false;
+                }
+                else if(day_id == 2) {
+                    this.mi = false;
+                    this.exercisesChangable[index].mi = false;
+                }
+                else if(day_id == 3) {
+                    this.don = false;
+                    this.exercisesChangable[index].don = false;
+                }
+                else if(day_id == 4) {
+                    this.fr = false;
+                    this.exercisesChangable[index].fr = false;
+                }
+                else if(day_id == 5) {
+                    this.sa = false;
+                    this.exercisesChangable[index].sa = false;
+                }
+                else if(day_id == 6) {
+                    this.so = false;
+                    this.exercisesChangable[index].so = false;
+                }
+
+                if(this.exercisesChangable[index].mo || this.exercisesChangable[index].di || this.exercisesChangable[index].mi || this.exercisesChangable[index].don || this.exercisesChangable[index].fr || this.exercisesChangable[index].sa ||this.exercisesChangable[index].so) this.planed = true;
+                else this.planed = false;
+
+                var data = {
+                    mo: this.mo,
+                    di: this.di,
+                    mi: this.mi,
+                    don: this.don,
+                    fr: this.fr,
+                    sa: this.sa,
+                    so: this.so,
+                    planed: this.planed
+                }
+
+
+                fetch('http://localhost:8081/remove/' + db_id, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        // Erfolgreiche Antwort
+                        console.log(response);
+                    })
+                    .catch(error => {
+                        // Fehlerbehandlung
+                        console.error(error);
+                    });
+
+
+            }
+            window.location = "http://localhost:8080"
             this.hidden = true;
-            this.disclaimerBtnHidden = true
+            this.disclaimerBtnHidden = true;
+
+        }
+
         }
     }
 
-}
+
 </script>
 
 <style>

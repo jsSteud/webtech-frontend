@@ -22,27 +22,34 @@
         <td v-if="exercise.machineType" style="font-size: 1vw;">equipment needed</td>
     </tr>
 </table>
-      <div v-if="clickedDArr.includes(exercise.id) && page1" class="hiddenDiv" :id=createIDForHiddenDiv(exercise.id) @input="input(exercise.comment, exercise.sets, exercise.reps)">
+      <div v-if="clickedDArr.includes(exercise.id) && page1" class="hiddenDiv" :id=createIDForHiddenDiv(exercise.id) @input="input()">
           <hr>
           <h3 class="commentHeader">Kommentar</h3>
-          <textarea :value="exercise.comment"></textarea>
-          <h3 class="commentHeader">Sets & Reps</h3>
-          <select>
+          <textarea :value="exercise.comment" id="commentField"></textarea>
+          <h3 v-if="exercise.machineType" class="commentHeader">Gewicht, Sets & Reps</h3>
+          <h3 v-else class="commentHeader">Sets & Reps</h3>
+          <select id="setsField">
               <option value="" selected disabled hidden>Sets: {{exercise.sets}}</option>
               <option v-for="i in 40" :key="i" >Sets: {{i}}</option>
           </select><br>
-          <select style="margin-top: 2vh">
+          <select style="margin-top: 2vh" id="repsField">
               <option value="" selected disabled hidden>Reps: {{exercise.reps}}</option>
               <option v-for="i in 40" :key="i" >Reps: {{i}}</option>
           </select>
-          <button v-if="change" style="margin-left: 2vw" @click="save()">Speichern</button>
+          <select style="margin-top: 2vh" id="weightField">
+              <option value="" selected disabled hidden>Weight: {{exercise.weight}}</option>
+              <option v-for="i in 200" :key="i" >Weight: {{i}}</option>
+          </select>
+
+          <button v-if="change && exercise.machineType" style="margin-left: 2vw" @click="save(true)">Speichern</button>
+          <button v-else-if="change" style="margin-left: 2vw" @click="save(false)">Speichern</button>
       </div>
 
   </div>
 
 </div>
 <!--    TODO: disable button until exercise is choosen-->
-    <button v-if="!page1" id="reinBtn" @click="addNewExerciseToPlan()">Rein in den Plan!</button>
+    <button v-if="!page1" id="reinBtn" @click="addNewExerciseToPlan()">Rein in den Plan und zurück!</button>
 
 </div>
 
@@ -62,23 +69,30 @@ export default {
         exercises: {
             type: Array,
             required: true
+            //page1 checks if we come from TrainingPLan
     }, page1: Boolean,
+        //day is for adding exercises to plan
         day: String
 }, data() {
         return{
             clicked: false,
             clickedDArr: clickedDiv,
             change: false,
-            newExercise: true
+            newExercise: true,
+            mo: false,
+            di: false,
+            mi: false,
+            don: false,
+            fr: false,
+            sa: false,
+            so: false
         }
     },
     methods: {
             showExerciseDetails(index){
                 if(this.page1){
                     this.change = false;
-                    // for (let i = 0; i < this.exercises.length; i++) {
-                    //     document.getElementById(i).style.height = "18vh";
-                    // }
+                    this.exercises.forEach(ex => document.getElementById(ex.id).style.height = "18vh")
 
                     if (clickedDiv.includes(index)) {
                         document.getElementById(index).style.height = "18vh";
@@ -86,7 +100,7 @@ export default {
                         clickedDiv = array;
 
                     } else {
-                        document.getElementById(index).style.height = "52vh";
+                        document.getElementById(index).style.height = "60vh";
                         var array2 = clickedDiv.filter(item => item == index);
                         clickedDiv = array2;
                         clickedDiv.push(index);
@@ -107,20 +121,25 @@ export default {
                 }
             },addNewExerciseToPlan() {
 
+            if(this.day == 1) this.mo = true;
+            else if(this.day == 2) this.di = true;
+            else if(this.day == 3) this.mi = true;
+            else if(this.day == 4) this.don = true;
+            else if(this.day == 5) this.fr = true;
+            else if(this.day == 6) this.sa = true;
+            else if(this.day == 7) this.so = true;
+
+
                 for (let i = 0; i < clickedDiv.length; i++) {
                 const data = {
-                    // machine: false,
-                    // reps: 0,
-                    // sets: '',
-                    // weight: '',
-                    // comment: '',
-                    mo: false,
-                    di: true,
-                    mi: false,
-                    don: false,
-                    fr: false,
-                    sa: false,
-                    so: true,
+
+                    mo: this.mo,
+                    di: this.di,
+                    mi: this.mi,
+                    don: this.don,
+                    fr: this.fr,
+                    sa: this.sa,
+                    so: this.so,
                     planed: true
                 };
 
@@ -140,6 +159,7 @@ export default {
                         console.error(error);
                     });
             }
+                window.location = "http://localhost:8080"
         },
             check(index){
                 return clickedDiv.includes(index)
@@ -147,11 +167,23 @@ export default {
             createIDForHiddenDiv(index){
                 var con = "hiddenDiv_";
                 return con.concat(" ", index)
-        }, save(){
-                alert()
-        }, input(comment, sets, reps){
+        }, save(machineType){
+                // let newComment = document.getElementById("commentField").value;
+                // let newSets = document.getElementById("setsField").value;
+                // let newReps = document.getElementById("repsField").value;
+                // if (machineType){
+                //     let newWeight = document.getElementById("weightField").value;
+                //     let newWeightClean = newWeight.slice(8);
+                // }
+                //  //Cut 'Reps: ' and 'Sets: '
+                // let newSetsClean = newSets.slice(6);
+                // let newRepsClean = newReps.slice(6);
+                //
+                //
+
+        }, input(){
                 //TODO: hide safe button if nothing changes
-            console.log(comment, sets, reps)
+
             this.change = true;
 
         },add(){
