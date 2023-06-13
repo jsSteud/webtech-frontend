@@ -2,7 +2,7 @@
 <div id="allInOne">
 <!--    <EditBar></EditBar>-->
 <div class="allExercisesContainer">
-  <div class="exerciseContainer" v-for="exercise in exercises" :key="exercise.id" :id="exercise.id">
+  <div class="exerciseContainer" v-for="exercise in this.filteredList" :key="exercise.id" :id="exercise.id">
 <table>
     <tr @click="showExerciseDetails(exercise.id)">
         <td class="leftColumn"><img src="@/assets/liegestutze.png" alt="sport_icon" id="sport_icon"></td>
@@ -10,10 +10,11 @@
 
     </tr>
     <tr @click="showExerciseDetails(exercise.id)">
-        <td v-if="exercise.planed" class="leftColumn"><i class="gg-check-o"></i></td>
-        <td v-if="exercise.planed" class="rightColumn">in use</td>
         <td v-if="!exercise.planed"><i class="gg-close-o"></i></td>
         <td v-if="!exercise.planed">not in use</td>
+        <td v-if="exercise.planed" class="leftColumn"><i class="gg-check-o"></i></td>
+        <td v-if="exercise.planed" class="rightColumn">in use</td>
+
     </tr>
     <tr @click="showExerciseDetails(exercise.id)">
         <td v-if="!exercise.machineType" class="leftColumn"><img src="@/assets/noEquipmentNeeded.png" alt="no_equipment_needed" id="noEquipmentNeeded"></td>
@@ -36,20 +37,20 @@
               <option value="" selected disabled hidden>Reps: {{exercise.reps}}</option>
               <option v-for="i in 40" :key="i" >Reps: {{i}}</option>
           </select>
-          <select style="margin-top: 2vh" id="weightField">
+          <select style="margin-top: 2vh" id="weightField" v-if="exercise.machineType">
               <option value="" selected disabled hidden>Weight: {{exercise.weight}}</option>
               <option v-for="i in 200" :key="i" >Weight: {{i}}</option>
           </select>
 
-          <button v-if="change && exercise.machineType" style="margin-left: 2vw" @click="save(true)">Speichern</button>
-          <button v-else-if="change" style="margin-left: 2vw" @click="save(false)">Speichern</button>
+          <button v-if="change && exercise.machineType" style="margin-left: 2vw" @click="save(true, exercise.id)">Speichern</button>
+          <button v-else-if="change" style="margin-left: 2vw" @click="save(false, exercise.id)">Speichern</button>
       </div>
-
+      <!--    TODO: disable button until exercise is choosen-->
+      <button v-if="!page1" id="reinBtn" @click="addNewExerciseToPlan()">Rein in den Plan und zurück!</button>
   </div>
 
 </div>
-<!--    TODO: disable button until exercise is choosen-->
-    <button v-if="!page1" id="reinBtn" @click="addNewExerciseToPlan()">Rein in den Plan und zurück!</button>
+
 
 </div>
 
@@ -72,7 +73,8 @@ export default {
             //page1 checks if we come from TrainingPLan
     }, page1: Boolean,
         //day is for adding exercises to plan
-        day: String
+        day: String,
+        searchInput: String
 }, data() {
         return{
             clicked: false,
@@ -85,14 +87,17 @@ export default {
             don: false,
             fr: false,
             sa: false,
-            so: false
+            so: false,
+            exercisesChangable: this.exercises
         }
+    }, beforeCreate() {
+        clickedDiv = []
     },
     methods: {
             showExerciseDetails(index){
                 if(this.page1){
                     this.change = false;
-                    this.exercises.forEach(ex => document.getElementById(ex.id).style.height = "18vh")
+                    this.filteredList.forEach(ex => document.getElementById(ex.id).style.height = "18vh")
 
                     if (clickedDiv.includes(index)) {
                         document.getElementById(index).style.height = "18vh";
@@ -120,44 +125,40 @@ export default {
 
                 }
             },addNewExerciseToPlan() {
+                let day = this.day;
+            for (let i = 0; i < clickedDiv.length; i++) {
 
-            if(this.day == 1) this.mo = true;
-            else if(this.day == 2) this.di = true;
-            else if(this.day == 3) this.mi = true;
-            else if(this.day == 4) this.don = true;
-            else if(this.day == 5) this.fr = true;
-            else if(this.day == 6) this.sa = true;
-            else if(this.day == 7) this.so = true;
+                this.exercisesChangable.forEach(function (exercise) {
+                    if (exercise.id == clickedDiv[i]) {
 
+                        switch (day) {
+                            case "1":
+                                exercise.mo = true
+                                break
+                            case "2":
+                                exercise.di = true
+                                break
+                            case "3":
+                                exercise.mi = true
+                                break
+                            case "4":
+                                exercise.don = true
+                                break
+                            case "5":
+                                exercise.fr = true
+                                break
+                            case "6":
+                                exercise.sa = true
+                                break
+                            case "7":
+                                exercise.so = true
+                                break
+                        }
+                    }
+                });
+                    const data = this.generateData(clickedDiv[i]);
+                    this.executeFetch(data, 'PUT', clickedDiv[i]);
 
-                for (let i = 0; i < clickedDiv.length; i++) {
-                const data = {
-
-                    mo: this.mo,
-                    di: this.di,
-                    mi: this.mi,
-                    don: this.don,
-                    fr: this.fr,
-                    sa: this.sa,
-                    so: this.so,
-                    planed: true
-                };
-
-                fetch('http://localhost:8081/machinetraining/' + clickedDiv[i], {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                    .then(response => {
-                        // Erfolgreiche Antwort
-                        console.log(response);
-                    })
-                    .catch(error => {
-                        // Fehlerbehandlung
-                        console.error(error);
-                    });
             }
                 window.location = "http://localhost:8080"
         },
@@ -167,23 +168,85 @@ export default {
             createIDForHiddenDiv(index){
                 var con = "hiddenDiv_";
                 return con.concat(" ", index)
-        }, save(machineType){
-                // let newComment = document.getElementById("commentField").value;
-                // let newSets = document.getElementById("setsField").value;
-                // let newReps = document.getElementById("repsField").value;
-                // if (machineType){
-                //     let newWeight = document.getElementById("weightField").value;
-                //     let newWeightClean = newWeight.slice(8);
-                // }
-                //  //Cut 'Reps: ' and 'Sets: '
-                // let newSetsClean = newSets.slice(6);
-                // let newRepsClean = newReps.slice(6);
-                //
-                //
+        }, save(machineType, id){
 
+                let newComment = document.getElementById("commentField").value;
+                let newSets = document.getElementById("setsField").value.slice(6);
+                let newReps = document.getElementById("repsField").value.slice(6);
+                let newWeight = 0;
+                if (machineType) newWeight = document.getElementById("weightField").value.slice(8);
+
+                this.exercisesChangable.forEach(function (exercise) {
+                        if (exercise.id == id) {
+                            exercise.comment = newComment;
+                            exercise.sets = newSets;
+                            exercise.reps = newReps;
+                            exercise.weight = newWeight;
+                        }
+                    }
+                );
+
+                let data = this.generateData(id);
+                this.executeFetch(data, 'PUT', id);
+
+
+        }, executeFetch(data, type, endpoint){
+                //TODO: Delete type
+            fetch('http://localhost:8081/machinetraining/' + endpoint, {
+                method: type,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    // Erfolgreiche Antwort
+                    console.log(response);
+                })
+                .catch(error => {
+                    // Fehlerbehandlung
+                    console.error(error);
+                });
+        },
+        generateData(id){
+                let data;
+
+                this.exercisesChangable.forEach(function(exercise){
+                    if(exercise.id == id){
+
+                        let isPlaned = (exercise.mo || exercise.di || exercise.mi || exercise.don || exercise.fr || exercise.sa || exercise.so)
+
+                        data = {
+                            id: exercise.id,
+                            mo: exercise.mo,
+                            di: exercise.di,
+                            mi: exercise.mi,
+                            don: exercise.don,
+                            fr: exercise.fr,
+                            sa: exercise.sa,
+                            so: exercise.so,
+                            planed: isPlaned,
+                            comment: exercise.comment,
+                            machineType: exercise.machineType,
+                            name: exercise.name,
+                            reps: exercise.reps,
+                            sets: exercise.sets,
+                            weight: exercise.weight
+                        }
+                        console.log(data)
+                    }
+
+                })
+                return data;
+        }, validPlaned(id){
+                this.exercisesChangable.forEach(function (exercise) {
+                    if(exercise.id == id){
+                        return (exercise.mo || exercise.di || exercise.mi || exercise.don || exercise.fr || exercise.sa || exercise.so)
+                    }
+                })
+            return false
         }, input(){
                 //TODO: hide safe button if nothing changes
-
             this.change = true;
 
         },add(){
@@ -191,7 +254,13 @@ export default {
                 document.getElementById("allInOne").style.filter= "blur(5px)"
         }
 
+        }, computed: {
+        filteredList() {
+            return this.exercisesChangable.filter(exercise => {
+                return exercise.name.toLowerCase().includes(this.searchInput.toLowerCase())
+            })
         }
+    }
 }
 </script>
 

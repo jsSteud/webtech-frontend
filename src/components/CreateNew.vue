@@ -8,7 +8,7 @@
         <select style="margin-top: 3vh"  v-if="machine" v-model="weight">
             <option value="" selected hidden>Gewichg in kg</option>
             <option>Maschine ohne Gewichte</option>
-            <option v-for="i in 40" :key="i">{{i}}</option>
+            <option v-for="i in 200" :key="i">{{i}}</option>
         </select><br>
 
         <h4>Möchtest du die Übung direkt einplanen?</h4>
