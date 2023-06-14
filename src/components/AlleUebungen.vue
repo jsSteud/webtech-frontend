@@ -74,7 +74,11 @@ export default {
     }, page1: Boolean,
         //day is for adding exercises to plan
         day: String,
-        searchInput: String
+        searchInput: String,
+        machine: Boolean,
+        ubung: Boolean,
+        notInUse: Boolean,
+        inUse: Boolean
 }, data() {
         return{
             clicked: false,
@@ -92,6 +96,8 @@ export default {
         }
     }, beforeCreate() {
         clickedDiv = []
+    }, mounted() {
+
     },
     methods: {
             showExerciseDetails(index){

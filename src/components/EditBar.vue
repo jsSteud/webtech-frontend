@@ -1,10 +1,11 @@
 <template>
     <div class="editBar">
         <details @change="filterChange()"><summary>Filter</summary>
-            <label><input type="checkbox" name="" id="machine" checked>Maschinenübung</label> <br>
-            <label> <input type="checkbox" name="" id="ubung" checked>Freie Übung </label><br>
-            <label> <input type="checkbox" name="" id="notInUse" checked>Not in use  </label><br>
-            <label> <input type="checkbox" name="" id="inUse" checked>In use</label> <br>
+            <label><input type="radio" name="name_1" id="machine" >Nur Maschinenübung</label> <br>
+            <label> <input type="radio" name="name_1" id="ubung" >Nur Freie Übung </label><br>
+            <hr>
+            <label> <input type="radio" name="name_2" id="notInUse">Nur 'Not in use'  </label><br>
+            <label> <input type="radio" name="name_2" id="inUse">Nur 'In use'</label> <br>
         </details>
         <input type="text" name="" id="searchBar" placeholder="Suche Übungen" @input="searchBarChange()">
         <router-link to="/createnew"><i class="gg-file-add"></i></router-link>
@@ -14,9 +15,6 @@
 </template>
 
 <script>
-
-import {eventBus} from "@/router/eventBus";
-
 
 export default {
     name: "EditBar",
@@ -29,22 +27,23 @@ export default {
     }, methods: {
         searchBarChange(){
             let input = document.getElementById("searchBar").value
-            //1st param 'searchInput' is the name of the '@searchInput'-event called when creating <EditBar> Tag
+            //1st param 'searchInput' is the name of the '@searchInput'-event, called when creating <EditBar> Tag
             this.$emit("searchInput", input)
 
         }, filterChange(){
-            let machine = document.getElementById("machine").checked
-            // let ubung = document.getElementById("ubung").checked
-            // let notInUse = document.getElementById("notInUse").checked
-            // let inUse = document.getElementById("inUse").checked
+            //TODO: checkbox deactivate
 
-            eventBus.$emit('mein-ereignis', machine)
+            let machineCheckbox = document.getElementById("machine")
+            let ubungCheckbox = document.getElementById("ubung")
+            let notInUseCheckbox = document.getElementById("notInUse")
+            let inUseCheckbox = document.getElementById("inUse")
 
 
-            // this.$emit("filterInputMachine", machine)
-            // this.$emit("filterInputUbung", ubung)
-            // this.$emit("filterInputNotInUse", notInUse)
-            // this.$emit("filterInputInUse", inUse)
+
+            this.$emit("filterInputMachine", machineCheckbox.checked)
+            this.$emit("filterInputUbung", ubungCheckbox.checked)
+            this.$emit("filterInputNotInUse", notInUseCheckbox.checked)
+            this.$emit("filterInputInUse", inUseCheckbox.checked)
 
         }
     }
