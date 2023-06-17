@@ -1,24 +1,53 @@
 <template>
-  <AlleUebungen :exercises="this.exercises" :day="this.day"></AlleUebungen>
+    <EditBar @searchInput="changeInput($event)" @filterInputMachine="changeFilterMachine($event)" @filterInputUbung="changeFilterUbung($event)" @filterInputNotInUse="changeFilterNotInUse($event)" @filterInputInUse="changeFilterInUse($event)" @filterInputAllMachine="changeFilterAllMachine($event)" @filterInputAllUse="changeFilterAllUse($event)"></EditBar>
+    <AlleUebungen :exercises="this.exercises" :delete-exercise="false" :normal-list="false" :day="this.day" :search-input="this.input" :machine="this.machine" :in-use="this.inUse" :not-in-use="this.notInUse" :ubung="this.ubung" :all-machine="this.allMachine" :all-use="this.allUse"></AlleUebungen>
 
 </template>
 
 <script>
 
 import AlleUebungen from "@/components/AlleUebungen.vue";
+import EditBar from "@/components/EditBar.vue";
 
 export default {
     name: "AddToPlanView",
     components: {
+        EditBar,
     AlleUebungen
     }, data () {
     return {
         exercises: [],
-        day: null
+        input: '',
+        day: null,
+        machine: false,
+        ubung: false,
+        notInUse: false,
+        inUse: false,
+        allMachine: true,
+        allUse: true
+    }
+}, methods: {
+    changeInput(input){
+        this.input = input
+    }, changeFilterMachine(machine){
+        this.machine = machine
+    }, changeFilterUbung(ubung) {
+        this.ubung = ubung
+    }, changeFilterNotInUse(notInUse){
+        this.notInUse = notInUse
+    }, changeFilterInUse(inUse){
+        this.inUse = inUse
+    }, changeFilterAllMachine(allMachine){
+        this.allMachine = allMachine
+    }, changeFilterAllUse(allUse){
+        this.allUse = allUse
     }
 },
 mounted () {
+        //if we come to add a new exercise
     this.day = this.$route.params.day;
+
+
     const endpoint = 'http://localhost:8081/allsessions';
     const requestOptions = {
         method: 'GET',

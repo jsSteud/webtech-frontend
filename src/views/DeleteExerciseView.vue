@@ -1,12 +1,8 @@
 <!--TODO: solution with event-bus-->
 <template>
-
-<div class="test">
-    <h1 class="header">Meine <span style="color:#4f9b8f;">Übungen.</span></h1>
+    <h1 class="header"><span style="color:#4f9b8f;">Lösche</span> meine <span style="color:#4f9b8f;">Übungen.</span></h1>
     <EditBar @searchInput="changeInput($event)" @filterInputMachine="changeFilterMachine($event)" @filterInputUbung="changeFilterUbung($event)" @filterInputNotInUse="changeFilterNotInUse($event)" @filterInputInUse="changeFilterInUse($event)" @filterInputAllMachine="changeFilterAllMachine($event)" @filterInputAllUse="changeFilterAllUse($event)"></EditBar>
-  <AlleUebungen :exercises="this.exercises" :delete-exercise="false" normalList=true :search-input="this.input" :machine="this.machine" :in-use="this.inUse" :not-in-use="this.notInUse" :ubung="this.ubung" :all-machine="this.allMachine" :all-use="this.allUse"></AlleUebungen>
-
-</div>
+    <AlleUebungen :exercises="this.exercises" :delete-exercise=true :normalList=false :search-input="this.input" :machine="this.machine" :in-use="this.inUse" :not-in-use="this.notInUse" :ubung="this.ubung" :all-machine="this.allMachine" :all-use="this.allUse"></AlleUebungen>
 </template>
 
 <script>
@@ -14,13 +10,12 @@
 import AlleUebungen from "@/components/AlleUebungen.vue";
 import EditBar from "@/components/EditBar.vue";
 
-
 export default {
-name: 'AllView',
+    name: 'DeleteExerciseView',
     components: {
-    AlleUebungen,
+        AlleUebungen,
         EditBar
-}, data () {
+    }, data () {
         return {
             exercises: [],
             input: '',
@@ -49,7 +44,6 @@ name: 'AllView',
         }
     },
     mounted () {
-        const fetch = require("node-fetch");
 
         const endpoint = 'http://localhost:8081/allsessions';
         const requestOptions = {
@@ -64,18 +58,13 @@ name: 'AllView',
             }))
             .catch(error => console.log('error', error))
     }
+
 }
 
 </script>
 
 
 <style>
-.header{
-    margin-left: 19vw;
-    color: white;
-}
 
-.test{
-    margin-top: 40px;
-}
+
 </style>

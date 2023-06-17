@@ -3,7 +3,7 @@
     <div id="newExersice" @input="changed = true">
 
         <h4 style="padding-top: 6vh">Gib der Übung einen Namen</h4>
-        <input type="text" name="" id="" placeholder="Name der Übung" v-model="name">
+        <input type="text" name="" id="ubungName" placeholder="Name der Übung" v-model="name">
         <label style="margin-left: 2vw"><input type="checkbox" @click="machine = true">Übung mit einer Maschine</label> <br>
         <select style="margin-top: 3vh"  v-if="machine" v-model="weight">
             <option value="" selected hidden>Gewichg in kg</option>
@@ -87,15 +87,19 @@ export default {
         generateIdReps(i){
         return "reps_" + i
         },
-        safe(){
-            const baseUrl = "http://localhost:8081"
-            let end;
-            let data;
-            let days = ["mo", "die", "mi", "do", "fr", "sa", "so"]
-            for (let i = 0; i < days.length; i++) {
-                let elemet = document.getElementById(days[i]);
-                if(elemet.checked) this.planed = true;
-            }
+        safe() {
+
+            // console.log(document.getElementById("ubungName").value)
+            if (document.getElementById("ubungName").value == '') alert("Gib der Übung mindestens einen Namen!")
+            else {
+                const baseUrl = "http://localhost:8081"
+                let end;
+                let data;
+                let days = ["mo", "die", "mi", "do", "fr", "sa", "so"]
+                for (let i = 0; i < days.length; i++) {
+                    let elemet = document.getElementById(days[i]);
+                    if (elemet.checked) this.planed = true;
+                }
 
                 end = "/machinetraining"
                 data = {
@@ -114,23 +118,24 @@ export default {
                     planed: this.planed,
                     machineType: this.machine
                 }
-            const endpoint = baseUrl + end
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                    // Authorization: 'Bearer ' + this.accessToken
-                },
-                body: JSON.stringify(data)
-            }
-            fetch(endpoint, requestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data)
-                })
-                .catch(error => console.log('error', error))
+                const endpoint = baseUrl + end
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                        // Authorization: 'Bearer ' + this.accessToken
+                    },
+                    body: JSON.stringify(data)
+                }
+                fetch(endpoint, requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data)
+                    })
+                    .catch(error => console.log('error', error))
 
-            window.location = "http://localhost:8080"
+                window.location = "http://localhost:8080"
+            }
         }
         }
 
@@ -139,6 +144,8 @@ export default {
 </script>
 
 <style>
+
+
 
 .safeBtn{
 
@@ -157,7 +164,8 @@ h4{
 }
 #newExersice{
     text-align: center;
-    height: 80vh;
+    height: auto;
+    padding-bottom: 20px;
     width: 40vw;
     margin-left: auto;
     margin-right: auto;

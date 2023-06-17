@@ -1,12 +1,10 @@
-import { shallowMount } from '@vue/test-utils'
-import HelloWorld from '@/components/HelloWorld.vue'
+import { mount } from '@vue/test-utils';
+import AllView from '@/views/AllView.vue';
 
-describe('HelloWorld.vue', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message'
-    const wrapper = shallowMount(HelloWorld, {
-      props: { msg }
-    })
-    expect(wrapper.text()).toMatch(msg)
-  })
-})
+describe('AllView', () => {
+  it('renders the correct header text', () => {
+    const wrapper = mount(AllView);
+    const header = wrapper.find('.header');
+    expect(header.text()).toBe('Meine Übungen.');
+  });
+});

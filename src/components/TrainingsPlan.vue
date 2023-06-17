@@ -8,13 +8,13 @@
   <div>
       <table class="training_table">
           <tr>
-              <th id="topLeft">Montag</th>
-              <th>Dienstag</th>
-              <th>Mittwoch</th>
-              <th>Donnerstag</th>
-              <th>Freitag</th>
-              <th>Samstag</th>
-              <th id="topRight">Sonntag</th>
+              <th id="mon">Montag</th>
+              <th id="tue">Dienstag</th>
+              <th id="wed">Mittwoch</th>
+              <th id="thu">Donnerstag</th>
+              <th id="fri">Freitag</th>
+              <th id="sat">Samstag</th>
+              <th id="sun">Sonntag</th>
           </tr>
 
           <tr v-for="(day, index) in days(this.exercisesChangable)" :key="day.id">
@@ -59,7 +59,8 @@ export default {
             //shows or hides add new exercise buttons etc. (edit mode)
             hidden: true,
             disclaimerBtnHidden: true,
-            exercisesChangable: this.exercises
+            exercisesChangable: this.exercises,
+            day: ''
         }
     },
     props: {
@@ -253,8 +254,12 @@ export default {
                 });
         }
 
-        }
+        }, mounted() {
+        const date = new Date();
+        let day = date.toString().slice(0,3).toLowerCase()
+        document.getElementById(day).style.color = "black"
     }
+}
 
 
 </script>
@@ -361,10 +366,10 @@ export default {
     background-color: white;
 }
 
-#topRight{
+#sun{
     border-top-right-radius: 10px;
 }
-#topLeft{
+#mon{
     border-top-left-radius: 10px;
 }
 

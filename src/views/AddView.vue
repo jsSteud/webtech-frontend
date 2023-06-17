@@ -1,5 +1,4 @@
 <template>
-
     <CreateNew></CreateNew>
 </template>
 

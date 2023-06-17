@@ -3,6 +3,7 @@ import StartView from "@/views/StartView.vue";
 import AllView from "@/views/AllView.vue";
 import AddView from "@/views/AddView.vue";
 import AddToPlanView from "@/views/AddToPlanView.vue";
+import DeleteExerciseView from "@/views/DeleteExerciseView.vue";
 
 const routes = [
   {
@@ -23,6 +24,10 @@ const routes = [
     path: "/addtoplan/:day",
     name: "addtoplan",
     component: AddToPlanView
+  }, {
+  path: '/deleteexercise',
+    name: 'deleteexercise',
+    component: DeleteExerciseView
   }
 ]
 
