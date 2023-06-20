@@ -2,8 +2,8 @@
 <template>
 
 <div class="test">
-    <h1 class="header">Meine <span style="color:#4f9b8f;">Übungen.</span></h1>
-    <EditBar @searchInput="changeInput($event)" @filterInputMachine="changeFilterMachine($event)" @filterInputUbung="changeFilterUbung($event)" @filterInputNotInUse="changeFilterNotInUse($event)" @filterInputInUse="changeFilterInUse($event)" @filterInputAllMachine="changeFilterAllMachine($event)" @filterInputAllUse="changeFilterAllUse($event)"></EditBar>
+    <h1 class="header">Meine <span style="color:#b71009;">Übungen.</span></h1>
+    <EditBar @searchInput="changeInput($event)"></EditBar>
   <AlleUebungen :exercises="this.exercises" :delete-exercise="false" normalList=true :search-input="this.input" :machine="this.machine" :in-use="this.inUse" :not-in-use="this.notInUse" :ubung="this.ubung" :all-machine="this.allMachine" :all-use="this.allUse"></AlleUebungen>
 
 </div>
@@ -14,12 +14,11 @@
 import AlleUebungen from "@/components/AlleUebungen.vue";
 import EditBar from "@/components/EditBar.vue";
 
-
 export default {
 name: 'AllView',
     components: {
-    AlleUebungen,
-        EditBar
+        EditBar,
+    AlleUebungen
 }, data () {
         return {
             exercises: [],
@@ -71,8 +70,7 @@ name: 'AllView',
 
 <style>
 .header{
-    margin-left: 19vw;
-    color: white;
+    margin-left: 1.5vw;
 }
 
 .test{

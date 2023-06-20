@@ -4,6 +4,7 @@ import AllView from "@/views/AllView.vue";
 import AddView from "@/views/AddView.vue";
 import AddToPlanView from "@/views/AddToPlanView.vue";
 import DeleteExerciseView from "@/views/DeleteExerciseView.vue";
+import LoginForm from "@/components/LoginForm.vue";
 
 const routes = [
   {
@@ -28,6 +29,10 @@ const routes = [
   path: '/deleteexercise',
     name: 'deleteexercise',
     component: DeleteExerciseView
+  }, {
+  path: '/login',
+    name: 'login',
+  component: LoginForm
   }
 ]
 

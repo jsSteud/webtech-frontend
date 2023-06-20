@@ -1,62 +1,108 @@
 <template>
-<div id="allInOne">
-<div class="allExercisesContainer">
-  <div class="exerciseContainer" v-for="exercise in this.filteredList" :key="exercise.id" :id="exercise.id">
-<table>
-    <tr @click="showExerciseDetails(exercise.id)">
-        <td class="leftColumn"><img src="@/assets/liegestutze.png" alt="sport_icon" id="sport_icon"></td>
-        <td class="rightColumn" id="exerciseName"><b>{{ exercise.name }}</b></td>
+    <table class="table align-middle mb-0 bg-white" style="margin-top: 3vh;">
+        <thead class="bg-light">
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Sets / Reps</th>
+            <th>Comment</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
 
-    </tr>
-    <tr @click="showExerciseDetails(exercise.id)">
-        <td v-if="!exercise.planed"><i class="gg-close-o"></i></td>
-        <td v-if="!exercise.planed">not in use</td>
-        <td v-if="exercise.planed" class="leftColumn"><i class="gg-check-o"></i></td>
-        <td v-if="exercise.planed" class="rightColumn">in use</td>
+        <tr v-for="exercise in this.filteredList" :key="exercise.id" :id="exercise.id">
 
-    </tr>
-    <tr @click="showExerciseDetails(exercise.id)">
-        <td v-if="!exercise.machineType" class="leftColumn"><img src="@/assets/noEquipmentNeeded.png" alt="no_equipment_needed" id="noEquipmentNeeded"></td>
-        <td v-if="!exercise.machineType" class="rightColumn">no equipment needed</td>
-        <td v-if="exercise.machineType"><img src="@/assets/equipmentNeeded.png" alt="equipment_needed" id="equipmentNeeded"></td>
-        <td v-if="exercise.machineType" style="font-size: 1vw;">equipment needed</td>
-    </tr>
-</table>
-      <div v-if="clickedDArr.includes(exercise.id) && normalList" class="hiddenDiv" :id=createIDForHiddenDiv(exercise.id) @input="input()">
-          <hr>
-          <h3 class="commentHeader">Kommentar</h3>
-          <textarea :value="exercise.comment" id="commentField"></textarea>
-          <h3 v-if="exercise.machineType" class="commentHeader">Gewicht, Sets & Reps</h3>
-          <h3 v-else class="commentHeader">Sets & Reps</h3>
+            <td  @click="markExersice(exercise.id)">
 
-          <select id="setsField">
-              <option selected disabled>Sets: {{exercise.sets}}</option>
-              <option v-for="i in 40" :key="i" id="">Sets: {{i}}</option>
-          </select><br>
-          <select style="margin-top: 2vh" id="repsField">
-              <option selected disabled >Reps: {{exercise.reps}}</option>
-              <option v-for="i in 40" :key="i" id="">Reps: {{i}}</option>
-          </select>
-          <select style="margin-top: 2vh" id="weightField" v-if="exercise.machineType">
-              <option selected disabled hidden>Weight: {{exercise.weight}}</option>
-              <option v-for="i in 200" :key="i" >Weight: {{i}}</option>
-          </select>
+                <div class="d-flex align-items-center" >
+                    <input class="rounded-circle" v-if="markArr.includes(exercise.id)" type="checkbox" value="" id="flexCheckChecked" style="accent-color: #4f9b8f; width: 45px; height: 45px" checked/>
+                    <img
+                        v-if="!markArr.includes(exercise.id)"
+                        src="@/assets/liegestutze.png"
+                        alt=""
+                        style="width: 45px; height: 45px"
+                        class="rounded-circle"
+                    />
+                    <div class="ms-3" style="padding-left: 1vw; cursor: pointer">
+                        <p v-if="!clickedDArr.includes(exercise.id)" class="fw-bold mb-1">{{exercise.name}}</p>
+                        <textarea class="form-control" v-if="clickedDArr.includes(exercise.id)" :value="exercise.name" style="height: auto" id="newName"></textarea>
 
-          <button v-if="change && exercise.machineType" @click="save(true, exercise.id)" id="safeBtn">Speichern</button>
-          <button v-else-if="change" @click="save(false, exercise.id)" id="safeBtn">Speichern</button>
-      </div>
+                    </div>
 
-      <!--    TODO: disable button until exercise is choosen-->
-<!--      If its neither normallist, deleteExercise it has to be for adding Exercises-->
-      <button v-if="!normalList && !deleteExercise" id="reinBtn" @click="addNewExerciseToPlan()">Rein in den Plan und zurück!</button>
-      <button v-if="deleteExercise" id="reinBtn" @click="deleteExercises()">Löschen</button>
-  </div>
+                </div>
 
-</div>
+            </td>
+
+            <td>
+                <p class="fw-normal mb-1" v-if="exercise.machineType">Mit Maschine</p>
+                <img src="@/assets/equipmentNeeded.png" v-if="exercise.machineType" style="height: 20px">
+                <p class="fw-normal mb-1" v-if="!exercise.machineType">Ohne Equipment</p>
+                <img src="@/assets/noEquipmentNeeded.png" v-if="!exercise.machineType" style="height: 20px">
+            </td>
 
 
-</div>
 
+            <td>
+                <span v-if="exercise.planed && !editClicked" class="badge badge-success rounded-pill d-inline" style="background-color: green">Active</span>
+                <span v-if="exercise.planed && editClicked  && clickedDArr.includes(exercise.id)" class="badge badge-success rounded-pill d-inline" style="background-color: lightgrey">Active</span>
+                <span v-if="!exercise.planed && !editClicked" class="badge badge-primary rounded-pill d-inline" style="background-color: #b71009">Not in use</span>
+                <span v-if="!exercise.planed && editClicked  && clickedDArr.includes(exercise.id)" class="badge badge-success rounded-pill d-inline" style="background-color: lightgrey">Not in use</span>
+            </td>
+
+
+            <td>
+                <p v-if="!exercise.machineType && !clickedDArr.includes(exercise.id)"><b>{{exercise.sets}} á {{ exercise.reps}}</b></p>
+                <p v-else-if="exercise.machineType && !clickedDArr.includes(exercise.id)"><b>{{exercise.sets}} á {{ exercise.reps}}</b> mit <b> {{exercise.weight}} kg </b></p>
+
+                <select v-if="clickedDArr.includes(exercise.id)" id="setsField">
+                    <option selected disabled>New set</option>
+                    <option v-for="i in 40" :key="i">
+                        {{i}}
+                    </option>
+                </select>
+                <p  v-if="clickedDArr.includes(exercise.id)">Current: {{exercise.sets}}</p>
+
+                <select v-if="clickedDArr.includes(exercise.id)" id="repsField">
+                    <option selected disabled>New reps</option>
+                    <option v-for="i in 40" :key="i">
+                        {{i}}
+                    </option>
+                </select>
+                <p  v-if="clickedDArr.includes(exercise.id)">Current: {{exercise.reps}}</p>
+
+                <select v-if="exercise.machineType && clickedDArr.includes(exercise.id)" id="weightField">
+                    <option selected disabled>New weight</option>
+                    <option v-for="i in 200" :key="i">
+                        {{i}}
+                    </option>
+                </select>
+                <p  v-if="exercise.machineType && clickedDArr.includes(exercise.id)">Current: {{exercise.weight}}</p>
+            </td>
+
+
+
+            <td >
+                <p v-if="!clickedDArr.includes(exercise.id)">{{exercise.comment}}</p>
+                <textarea class="form-control" v-if="clickedDArr.includes(exercise.id)" :value="exercise.comment" style="height: auto" id="commentField"></textarea>
+            </td>
+
+
+
+            <td>
+                <button v-if="!editClicked && !clickedDArr.includes(exercise.id)" type="button" class="btn btn-link btn-sm btn-rounded" @click="edit(exercise.id)">Edit</button>
+                <button v-if="clickedDArr.includes(exercise.id)" type="button" class="btn btn-link btn-sm btn-rounded" @click="deleteExercises(exercise.id)">Löschen</button>
+                <button v-if="clickedDArr.includes(exercise.id)" type="button" class="btn btn-link btn-sm btn-rounded" @click="save(exercise.machineType, exercise.id)">Speichern</button>
+                <button v-if="clickedDArr.includes(exercise.id)" type="button" class="btn btn-link btn-sm btn-rounded" @click="edit(exercise.id)">Abbrechen</button>
+            </td>
+
+        </tr>
+
+
+        </tbody>
+    </table>
+    <button class="btn btn-primary" @click="addNewExerciseToPlan()">Zum Plan hinzufügen</button>
 </template>
 
 
@@ -92,7 +138,8 @@ export default {
     data() {
         return{
             clicked: false,
-            clickedDArr: clickedDiv,
+            clickedDArr: [],
+            markArr: [],
             change: false,
             newExercise: true,
             mo: false,
@@ -102,7 +149,8 @@ export default {
             fr: false,
             sa: false,
             so: false,
-            exercisesChangable: this.exercises
+            exercisesChangable: this.exercises,
+            editClicked: false
         }
     },
     methods: {
@@ -113,47 +161,35 @@ export default {
                 )
                 this.executeDeleteFetch(this.clickedDArr[i])
             }
+            this.editClicked = false
 
         },
-            showExerciseDetails(index){
-                if(this.normalList){
-                    this.change = false;
-                    this.filteredList.forEach(ex => document.getElementById(ex.id).style.height = "18vh")
-
-                    if (clickedDiv.includes(index)) {
-                        document.getElementById(index).style.height = "18vh";
-                        document.getElementById(index).style.paddingBottom = "none";
-                        var array = clickedDiv.filter(item => item !== index);
-                        clickedDiv = array;
-
-                    } else {
-                        document.getElementById(index).style.height = "auto";
-                        document.getElementById(index).style.paddingBottom = "15px";
-                        var array2 = clickedDiv.filter(item => item == index);
-                        clickedDiv = array2;
-                        clickedDiv.push(index);
-                    }
-                    this.clickedDArr = clickedDiv;
+            edit(index){
+                if(this.clickedDArr.includes(index)){
+                    var array = this.clickedDArr.filter(item => item !== index);
+                    this.clickedDArr = array;
                 } else {
-                    if (clickedDiv.includes(index)){
-                        document.getElementById(index).style.border = "none";
-                        document.getElementById(index).style.height = "18vh";
-                        array = clickedDiv.filter(item => item !== index);
-                        clickedDiv = array;
-                    } else {
-                        document.getElementById(index).style.border = "0.5vh solid red";
-                        document.getElementById(index).style.height = "16vh";
-                        clickedDiv.push(index);
-                    }
-
+                    this.clickedDArr.push(index)
                 }
-            },
+                if (this.clickedDArr.length == 0) this.editClicked = false
+                else this.editClicked = true
+
+            }, markExersice(index){
+            if(this.markArr.includes(index)){
+                var array = this.markArr.filter(item => item !== index);
+                this.markArr = array;
+            } else {
+                this.markArr.push(index)
+            }
+        },
             addNewExerciseToPlan() {
                 let day = this.day;
-            for (let i = 0; i < clickedDiv.length; i++) {
+                let validArr =  this.markArr
+
+                for (let i = 0; i < validArr.length; i++) {
 
                 this.exercisesChangable.forEach(function (exercise) {
-                    if (exercise.id == clickedDiv[i]) {
+                    if (exercise.id == validArr[i]) {
 
                         switch (day) {
                             case "1":
@@ -180,8 +216,8 @@ export default {
                         }
                     }
                 });
-                    const data = this.generateData(clickedDiv[i]);
-                    this.executeFetch(data, 'PUT', clickedDiv[i]);
+                    const data = this.generateData(validArr[i]);
+                    this.executeFetch(data, 'PUT', validArr[i]);
 
             }
                 window.location = "http://localhost:8080"
@@ -194,25 +230,33 @@ export default {
                 return con.concat(" ", index)
         },
             save(machineType, id){
-                let newComment = document.getElementById("commentField").value;
-                let newSets = document.getElementById("setsField").value.slice(6);
-                let newReps = document.getElementById("repsField").value.slice(6);
+                let newComment = document.getElementById("commentField").value
+                let newSets = 0
+                let newReps = 0
                 let newWeight = 0;
-                if (machineType) newWeight = document.getElementById("weightField").value.slice(8);
+                let newName = document.getElementById("newName").value
 
                 this.exercisesChangable.forEach(function (exercise) {
                         if (exercise.id == id) {
+
+                            if(document.getElementById("setsField").value == "New set") newSets = exercise.sets
+                            else newSets = document.getElementById("setsField").value
+                            if(document.getElementById("repsField").value == "New reps") newReps = exercise.reps
+                            else newReps = document.getElementById("repsField").value
+                            if(machineType && (document.getElementById("weightField").value == "New weight")) newWeight = exercise.weight
+                            else if(machineType) newWeight = document.getElementById("weightField").value
+
                             exercise.comment = newComment;
                             exercise.sets = newSets;
                             exercise.reps = newReps;
                             exercise.weight = newWeight;
+                            exercise.name = newName;
                         }
                     }
                 );
 
                 let data = this.generateData(id);
                 this.executeFetch(data, 'PUT', id);
-
 
         },
             executeFetch(data, type, endpoint){
@@ -298,6 +342,7 @@ export default {
         }, computed: {
         filteredList() {
             return this.exercisesChangable.filter(exercise => {
+
                 //first filter search bar input
                 return exercise.name.toLowerCase().includes(this.searchInput.toLowerCase())
             }).filter(exercise => {
@@ -318,6 +363,8 @@ export default {
 
 
 <style>
+
+
 
 #safeBtn{
     border-radius: 5px;

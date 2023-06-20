@@ -1,7 +1,7 @@
 <template>
     <div class="content_startView">
-       <h1 class="welcomeHeader">Meine <span style="color:#4f9b8f;">Ziele. </span></h1>
-        <h1 class="welcomeHeader">Mein <span style="color:#4f9b8f;">Trainingsplan. </span></h1>
+       <h1 class="welcomeHeader">Meine <span style="color:#b71009;">Ziele. </span></h1>
+        <h1 class="welcomeHeader">Mein <span style="color:#b71009;">Trainingsplan. </span></h1>
         <TrainingsPlan :exercises="this.exercises"></TrainingsPlan>
     </div>
 </template>
@@ -41,12 +41,11 @@ export default {
 
 
 .welcomeHeader{
-    color: white;
     margin-left: 20vw;
 }
 
 .content_startView{
-    margin-top: 100px;
+    margin-top: 50px;
 }
 
 body{

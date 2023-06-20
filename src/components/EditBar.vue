@@ -1,20 +1,20 @@
 <template>
-    <div class="editBar">
-        <details @change="filterChange()"><summary>Filter</summary>
-            <label><input type="radio" name="name_1" id="allMachine" checked>Alle...</label> <br>
-            <label><input type="radio" name="name_1" id="machine" >Nur Maschinenübung</label> <br>
-            <label> <input type="radio" name="name_1" id="ubung" >Nur Freie Übung </label><br>
-            <hr>
-            <label><input type="radio" name="name_2" id="allUse" checked>Alle...</label> <br>
-            <label> <input type="radio" name="name_2" id="notInUse">Nur 'Not in use'  </label><br>
-            <label> <input type="radio" name="name_2" id="inUse">Nur 'In use'</label> <br>
-        </details>
-        <input type="text" name="" id="searchBar" placeholder="Suche Übungen" @input="searchBarChange()">
-        <router-link to="/deleteexercise"><i class="gg-file-remove"></i></router-link>
-        <router-link to="/createnew"><i class="gg-file-add"></i></router-link>
+    <div class="container">
 
+    <div class="row height d-flex justify-content-center align-items-center">
+
+        <div class="col-md-8">
+
+            <div class="search">
+                <i class="fa fa-search"></i>
+                <input id="searchBar" type="text" class="form-control" placeholder="Looking for an exercise? Just search!" @change="searchBarChange">
+                <button class="btn btn-primary">Search</button>
+            </div>
+
+        </div>
 
     </div>
+</div>
 </template>
 
 <script>
@@ -59,46 +59,42 @@ export default {
 
 <style>
 
-.gg-file-remove{
-    color: #b71009;
-    --ggs: 1.6;
-    margin-left: 3vw;
-    cursor: pointer;
-}
-.gg-file-add{
-    color: #4f9b8f;
-    --ggs: 1.6;
-    margin-left: 3vw;
-    cursor: pointer;
-}
-details{
-    color: white;
-    font-size: 1.3vw;
-    padding: 4px;
-    cursor: pointer;
-    accent-color: #4f9b8f;
-}
-
-.editBar{
-    display: flex;
-    align-items: center;
-    margin-left: 17vw;
-    margin-top: 5vh;
-}
-
-
-
-#searchBar{
-    width: 10vw;
-    height: 1.5vh;
-    background-color: white;
-    border: 1px solid lightgrey;
-    color: lightgrey;
-    border-radius: 15px;
-    font-size: 1vw;
-    padding: 4px;
-    margin-left: 3vw;
+.search{
+    position: relative;
+    box-shadow: 0 0 40px rgba(51, 51, 51, .1);
 
 }
+
+.search input{
+
+    height: 50px;
+    text-indent: 25px;
+    border: 2px solid #d6d4d4;
+
+
+}
+
+.container{
+    margin-top: 4vh;
+}
+.search input:focus{
+
+    box-shadow: none;
+    border: 2px solid blue;
+
+
+}
+
+.search button{
+
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 40px;
+    width: 110px;
+    background: #b71009;
+    border: none;
+}
+
 
 </style>
