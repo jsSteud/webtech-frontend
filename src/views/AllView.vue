@@ -62,6 +62,7 @@ name: 'AllView',
                 this.exercises.push(exercise)
             }))
             .catch(error => console.log('error', error))
+        console.log(this.exercises)
     }
 }
 

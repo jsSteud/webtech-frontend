@@ -83,7 +83,7 @@
 
         <div class="form-group">
 
-            <button type="button" class="btn btn-block create-account" style="width: 100%" @click="testInput()">Create Exercise</button>
+            <button type="button" class="btn btn-block create-account" style="width: 100%" @click="safe()">Create Exercise</button>
 
         </div>
     </form>
@@ -204,6 +204,8 @@ export default {
         return "reps_" + i
         },
         safe() {
+
+          this.testInput()
             if (document.getElementById("name").value == '') alert("Gib der Übung mindestens einen Namen!")
             else {
                 const baseUrl = "http://localhost:8081"
