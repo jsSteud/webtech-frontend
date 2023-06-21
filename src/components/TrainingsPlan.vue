@@ -107,7 +107,6 @@ export default {
             })
 
             var week = [monday, tuesday, wednesday, thursday, friday, saturday, sunday];
-            console.log(week)
             return week;
 
             }, days(){
