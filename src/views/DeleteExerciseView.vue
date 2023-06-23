@@ -1,5 +1,6 @@
 <!--TODO: solution with event-bus-->
 <template>
+    <NavBar></NavBar>
     <h1 class="header"><span style="color:#4f9b8f;">Lösche</span> meine <span style="color:#4f9b8f;">Übungen.</span></h1>
     <EditBar @searchInput="changeInput($event)" @filterInputMachine="changeFilterMachine($event)" @filterInputUbung="changeFilterUbung($event)" @filterInputNotInUse="changeFilterNotInUse($event)" @filterInputInUse="changeFilterInUse($event)" @filterInputAllMachine="changeFilterAllMachine($event)" @filterInputAllUse="changeFilterAllUse($event)"></EditBar>
     <AlleUebungen :exercises="this.exercises" :delete-exercise=true :normalList=false :search-input="this.input" :machine="this.machine" :in-use="this.inUse" :not-in-use="this.notInUse" :ubung="this.ubung" :all-machine="this.allMachine" :all-use="this.allUse"></AlleUebungen>
@@ -9,10 +10,12 @@
 
 import AlleUebungen from "@/components/AlleUebungen.vue";
 import EditBar from "@/components/EditBar.vue";
+import NavBar from "@/components/NavBar.vue";
 
 export default {
     name: 'DeleteExerciseView',
     components: {
+        NavBar,
         AlleUebungen,
         EditBar
     }, data () {

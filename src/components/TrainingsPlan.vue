@@ -268,6 +268,7 @@ export default {
         const date = new Date();
         let day = date.toString().slice(0,3).toLowerCase()
         document.getElementById(day).style.color = "#16a2b8"
+
     }
 }
 

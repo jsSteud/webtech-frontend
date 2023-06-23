@@ -1,4 +1,5 @@
 <template>
+    <NavBar></NavBar>
     <EditBar @searchInput="changeInput($event)" @filterInputMachine="changeFilterMachine($event)" @filterInputUbung="changeFilterUbung($event)" @filterInputNotInUse="changeFilterNotInUse($event)" @filterInputInUse="changeFilterInUse($event)" @filterInputAllMachine="changeFilterAllMachine($event)" @filterInputAllUse="changeFilterAllUse($event)"></EditBar>
     <AlleUebungen :exercises="this.exercises" :delete-exercise="false" :normal-list="false" :day="this.day" :search-input="this.input" :machine="this.machine" :in-use="this.inUse" :not-in-use="this.notInUse" :ubung="this.ubung" :all-machine="this.allMachine" :all-use="this.allUse"></AlleUebungen>
 
@@ -8,10 +9,12 @@
 
 import AlleUebungen from "@/components/AlleUebungen.vue";
 import EditBar from "@/components/EditBar.vue";
+import NavBar from "@/components/NavBar.vue";
 
 export default {
     name: "AddToPlanView",
     components: {
+        NavBar,
         EditBar,
     AlleUebungen
     }, data () {
@@ -51,7 +54,10 @@ mounted () {
     const endpoint = 'http://localhost:8081/allsessions';
     const requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {
+            'token': localStorage.gymToken
+        }
     }
 
     fetch(endpoint, requestOptions)

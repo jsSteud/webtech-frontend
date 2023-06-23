@@ -203,16 +203,18 @@ export default {
         }, generateIdReps(i){
         return "reps_" + i
         },
-        safe() {
+        async safe() {
 
-          this.testInput()
+            this.testInput()
             if (document.getElementById("name").value == '') alert("Gib der Übung mindestens einen Namen!")
             else {
                 const baseUrl = "http://localhost:8081"
                 let end;
                 let data;
+                // eslint-disable-next-line no-unused-vars
+                let exercise_id;
 
-                if (this.mo ||this.di || this.mi || this.don || this.fr || this.sa ||this.so) this.planed = true
+                if (this.mo || this.di || this.mi || this.don || this.fr || this.sa || this.so) this.planed = true
 
                 end = "/machinetraining"
                 data = {
@@ -235,19 +237,41 @@ export default {
                 const requestOptions = {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
-                        // Authorization: 'Bearer ' + this.accessToken
+                        'Content-Type': 'application/json',
+                        'token': localStorage.gymToken
                     },
                     body: JSON.stringify(data)
                 }
-                fetch(endpoint, requestOptions)
+                await fetch(endpoint, requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data)
+                        exercise_id = data.id
+                    })
+                    .catch(error => console.log('error', error))
+
+                let dataPut = {
+                    id: exercise_id
+                }
+                console.log(dataPut)
+                const requestOptionsPut = {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': localStorage.gymToken
+                    },
+                    body: JSON.stringify(dataPut)
+                }
+
+                await fetch('http://localhost:8081/addExercise', requestOptionsPut)
                     .then(response => response.json())
                     .then(data => {
                         console.log('Success:', data)
                     })
                     .catch(error => console.log('error', error))
 
-                window.location = "http://localhost:8080"
+
+                // window.location = "http://localhost:8080"
             }
         }
         }

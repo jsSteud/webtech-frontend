@@ -1,6 +1,6 @@
 <!--TODO: solution with event-bus-->
 <template>
-
+<NavBar></NavBar>
 <div class="test">
     <h1 class="header">Meine <span style="color:#b71009;">Übungen.</span></h1>
     <EditBar @searchInput="changeInput($event)"></EditBar>
@@ -13,10 +13,12 @@
 
 import AlleUebungen from "@/components/AlleUebungen.vue";
 import EditBar from "@/components/EditBar.vue";
+import NavBar from "@/components/NavBar.vue";
 
 export default {
 name: 'AllView',
     components: {
+        NavBar,
         EditBar,
     AlleUebungen
 }, data () {
@@ -53,7 +55,10 @@ name: 'AllView',
         const endpoint = 'http://localhost:8081/allsessions';
         const requestOptions = {
             method: 'GET',
-            redirect: 'follow'
+            redirect: 'follow',
+            headers: {
+                'token': localStorage.gymToken
+            }
         }
 
         fetch(endpoint, requestOptions)
