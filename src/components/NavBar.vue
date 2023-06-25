@@ -32,7 +32,8 @@
                     <!-- Left links -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="http://localhost:8080">Trainingplan</a>
+<!--                            TODO: BASE_URL-->
+                            <a class="nav-link" href="http://localhost:8080/exercises">Trainingplan</a>
 
                         </li>
                         <li class="nav-item">
@@ -63,7 +64,7 @@ export  default {
     }, methods: {
         logout(){
             localStorage.removeItem("gymToken")
-            window.location = "http://localhost:8080/login"
+            window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/login"
         }
     }
 }

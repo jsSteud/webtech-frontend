@@ -33,25 +33,6 @@ export default {
             //1st param 'searchInput' is the name of the '@searchInput'-event, called when creating <EditBar> Tag
             this.$emit("searchInput", input)
 
-        }, filterChange(){
-
-            let allMachine = document.getElementById("allMachine")
-            let machineCheckbox = document.getElementById("machine")
-            let ubungCheckbox = document.getElementById("ubung")
-
-            let allUse = document.getElementById("allUse")
-            let notInUseCheckbox = document.getElementById("notInUse")
-            let inUseCheckbox = document.getElementById("inUse")
-
-
-            this.$emit("filterInputAllMachine", allMachine.checked)
-            this.$emit("filterInputMachine", machineCheckbox.checked)
-            this.$emit("filterInputUbung", ubungCheckbox.checked)
-
-            this.$emit("filterInputAllUse", allUse.checked)
-            this.$emit("filterInputNotInUse", notInUseCheckbox.checked)
-            this.$emit("filterInputInUse", inUseCheckbox.checked)
-
         }
     }
 }

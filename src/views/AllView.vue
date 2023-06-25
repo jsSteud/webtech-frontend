@@ -4,7 +4,7 @@
 <div class="test">
     <h1 class="header">Meine <span style="color:#b71009;">Übungen.</span></h1>
     <EditBar @searchInput="changeInput($event)"></EditBar>
-  <AlleUebungen :exercises="this.exercises" :delete-exercise="false" :normalList="true" :search-input="this.input" :machine="this.machine" :in-use="this.inUse" :not-in-use="this.notInUse" :ubung="this.ubung" :all-machine="this.allMachine" :all-use="this.allUse"></AlleUebungen>
+  <AlleUebungen :exercises="this.exercises" :search-input="this.input"></AlleUebungen>
 
 </div>
 </template>
@@ -35,38 +35,29 @@ name: 'AllView',
     }, methods: {
         changeInput(input){
             this.input = input
-        }, changeFilterMachine(machine){
-            this.machine = machine
-        }, changeFilterUbung(ubung) {
-            this.ubung = ubung
-        }, changeFilterNotInUse(notInUse){
-            this.notInUse = notInUse
-        }, changeFilterInUse(inUse){
-            this.inUse = inUse
-        }, changeFilterAllMachine(allMachine){
-            this.allMachine = allMachine
-        }, changeFilterAllUse(allUse){
-            this.allUse = allUse
         }
     },
     mounted () {
-        const fetch = require("node-fetch");
+        if (localStorage.gymToken == null || localStorage.gymToken == undefined) window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/login"
+        else {
+            const fetch = require("node-fetch");
 
-        const endpoint = 'http://localhost:8081/allsessions';
-        const requestOptions = {
-            method: 'GET',
-            redirect: 'follow',
-            headers: {
-                'token': localStorage.gymToken
+            const endpoint = process.env.VUE_APP_BASE_URL_BACKEND + '/allsessions';
+            const requestOptions = {
+                method: 'GET',
+                redirect: 'follow',
+                headers: {
+                    'token': localStorage.gymToken
+                }
             }
-        }
 
-        fetch(endpoint, requestOptions)
-            .then(response => response.json())
-            .then(result => result.forEach(exercise => {
-                this.exercises.push(exercise)
-            }))
-            .catch(error => console.log('error', error))
+            fetch(endpoint, requestOptions)
+                .then(response => response.json())
+                .then(result => result.forEach(exercise => {
+                    this.exercises.push(exercise)
+                }))
+                .catch(error => console.log('error', error))
+        }
     }
 }
 

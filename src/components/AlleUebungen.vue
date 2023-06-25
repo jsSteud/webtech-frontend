@@ -119,21 +119,12 @@ export default {
         exercises: {
             type: Array,
             required: true
-            //addToPlan checks if we come from TrainingPLan and want to add exercises
+            //normal checks if we come from TrainingPLan and want to add exercises or if its just a normal list in Alle Übungen
     }, normalList: Boolean,
-        // deleteExercise checks if we come from AllExercises and want to delete exercices
-        deleteExercise: Boolean,
         //day is for adding exercises to plan
         day: String,
         //comes from <EditBar> for search-function
-        searchInput: String,
-        // next six vars are for filter-function in <EditBar>
-        machine: Boolean,
-        ubung: Boolean,
-        notInUse: Boolean,
-        inUse: Boolean,
-        allMachine: Boolean,
-        allUse: Boolean
+        searchInput: String
 },
     data() {
         return{
@@ -220,14 +211,10 @@ export default {
                     this.executeFetch(data, 'PUT', validArr[i]);
 
             }
-                window.location = "http://localhost:8080"
+                window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/exercises"
         },
             check(index){
                 return clickedDiv.includes(index)
-        },
-            createIDForHiddenDiv(index){
-                var con = "hiddenDiv_";
-                return con.concat(" ", index)
         },
             save(machineType, id){
                 let newComment = document.getElementById("commentField").value
@@ -261,7 +248,7 @@ export default {
         },
             executeFetch(data, type, endpoint){
                 //TODO: Delete type
-            fetch('http://localhost:8081/machinetraining/' + endpoint, {
+            fetch(process.env.VUE_APP_BASE_URL_BACKEND + '/training/' + endpoint, {
                 method: type,
                 headers: {
                     'Content-Type': 'application/json'
@@ -278,7 +265,7 @@ export default {
                 });
         },
             executeDeleteFetch(endpoint){
-            fetch('http://localhost:8081/machinetraining/' + endpoint, {
+            fetch( process.env.VUE_APP_BASE_URL_BACKEND + '/training/' + endpoint, {
                 method: 'DELETE'
             })
                 .then(response => {
@@ -321,40 +308,16 @@ export default {
                 })
                 return data;
         },
-            validPlaned(id){
-                this.exercisesChangable.forEach(function (exercise) {
-                    if(exercise.id == id){
-                        return (exercise.mo || exercise.di || exercise.mi || exercise.don || exercise.fr || exercise.sa || exercise.so)
-                    }
-                })
-            return false
-        },
             input(){
                 //TODO: hide safe button if nothing changes
             this.change = true;
 
-        },
-            add(){
-                this.newExercise = true;
-                document.getElementById("allInOne").style.filter= "blur(5px)"
         }
-
         }, computed: {
         filteredList() {
             return this.exercisesChangable.filter(exercise => {
-
                 //first filter search bar input
                 return exercise.name.toLowerCase().includes(this.searchInput.toLowerCase())
-            }).filter(exercise => {
-                // second filter first filter option 'machine'
-                if(this.machine) return exercise.machineType
-                if(this.ubung) return !exercise.machineType
-                if (this.allMachine) return exercise.machineType || !exercise.machineType
-            }).filter(exercise => {
-                // third filter second filter option 'in use'
-                if (this.notInUse) return !exercise.planed
-                if (this.inUse) return exercise.planed
-                if(this.allUse) return exercise.planed || !exercise.planed
             })
         }
     }
@@ -365,33 +328,6 @@ export default {
 <style>
 
 
-
-#safeBtn{
-    border-radius: 5px;
-    background-color: white;
-    border: 1px solid #4f9b8f;
-    padding: 10px;
-
-
-}
-
-#reinBtn{
-    position: absolute;
-    width: 15vw;
-    bottom: 10vh;
-    right: 43vw;
-    background-color: white;
-    border-radius: 20px;
-    border: 1px solid #4f9b8f;
-    padding: 10px;
-    font-size: 1vw;
-    cursor: pointer;
-
-}
-
-#reinBtn:disabled{
-    cursor: not-allowed;
-}
 
 select{
     width: 10vw;
@@ -409,81 +345,22 @@ textarea{
     border-radius: 3px;
 }
 
-.commentHeader{
-    color: #4f9b8f;
-    margin-left: 1vw;
-}
-
-.allExercisesContainer{
-    width: 70vw;
-    margin-left: auto;
-    margin-right: auto;
-
-}
 
 #allInOne{
     margin-top: 4vh;
 }
 
-.gg-check-o{
-    color: #4f9b8f;
-}
-
-.gg-close-o{
-    color: red;
-}
-.exerciseContainer{
-    background-color: white;
-    width: 20vw;
-    height: 18vh;
-    border-radius: 15px;
-    float: left;
-    margin-top: 3vh;
-    /*TODO: Find a better way to center*/
-    margin-left: 2.5vw;
-    cursor: pointer;
-}
+.
 
 table{
 margin-left: 1.5vw;
     padding: 0.5vh;
 }
 
-.leftColumn{
-    width: 5vw;
-
-
-}
 
 td{
     padding: 5px;
 }
-.rightColumn{
-    width: 10vw;
-    font-size: 1vw;
-}
 
-#sport_icon{
-    height: 4vh;
-    margin-right: 15px;
-    pointer-events: none;
-
-}
-#noEquipmentNeeded{
-    height: 4vh;
-    margin-right: 15px;
-    pointer-events: none;
-
-}
-
-#equipmentNeeded{
-    height: 3vh;
-    margin-right: 15px;
-    pointer-events: none;
-}
-#exerciseName{
-    color: #4f9b8f;
-    font-size: 1.2vw;
-}
 
 </style>

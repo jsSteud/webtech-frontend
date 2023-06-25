@@ -1,40 +1,4 @@
-<template xmlns:input="http://www.w3.org/1999/html">
-  <!--   TODO: so etwas in eigener Component?-->
-<!--    <div id="newExersice" @input="changed = true">-->
-
-<!--        <h4 style="padding-top: 6vh">Gib der Übung einen Namen</h4>-->
-<!--        <input type="text" name="" id="ubungName" placeholder="Name der Übung" v-model="name">-->
-<!--        <label style="margin-left: 2vw"><input type="checkbox" @click="machine = true">Übung mit einer Maschine</label> <br>-->
-<!--        <select style="margin-top: 3vh"  v-if="machine" v-model="weight">-->
-<!--            <option value="" selected hidden>Gewichg in kg</option>-->
-<!--            <option>Maschine ohne Gewichte</option>-->
-<!--            <option v-for="i in 200" :key="i">{{i}}</option>-->
-<!--        </select><br>-->
-
-<!--        <h4>Möchtest du die Übung direkt einplanen?</h4>-->
-<!--        <label><input type="checkbox" name="" id="mo" v-model="mo">Montag</label>-->
-<!--        <label><input type="checkbox" name="" id="die" v-model="di">Dienstag</label>-->
-<!--        <label><input type="checkbox" name="" id="mi" v-model="mi">Mittwoch</label>-->
-<!--        <label><input type="checkbox" name="" id="do" v-model="don">Donnerstag</label>-->
-<!--        <label><input type="checkbox" name="" id="fr" v-model="fr">Freitag</label>-->
-<!--        <label><input type="checkbox" name="" id="sa" v-model="sa">Samstag</label>-->
-<!--        <label><input type="checkbox" name="" id="so" v-model="so">Sonntag</label>-->
-
-<!--        <h4>Wie viele Sets & Wiederholungen willst du machen?</h4>-->
-<!--        <select @change="handleSets">-->
-<!--            <option selected disabled hidden>Sets</option>-->
-<!--            <option v-for="i in 40" :key="i" >{{i}}</option>-->
-<!--        </select><br>-->
-<!--        <select style="margin-top: 2vh" @change="handleReps">-->
-<!--            <option selected disabled hidden >Reps</option>-->
-<!--            <option v-for="i in 40" :key="i" id="generateIdReps(i)">{{i}}</option>-->
-<!--        </select>-->
-
-<!--        <h4>Hast du ein zusätzlichen Kommentar?</h4>-->
-<!--        <input type="text" name="" id="" placeholder="Kommentar" style="height: 10vh; width: 20vw" v-model="comment"><br>-->
-
-<!--        <button class="safeBtn" v-if="changed" @click="safe()">Speichern und zurück zur Übersicht</button>-->
-<!--    </div>-->
+<template>
 
     <div class="registration-form">
     <form>
@@ -48,9 +12,9 @@
             <label for="machine" style="margin-left: 10px">Übung an einer Maschine</label>
         </div>
         <div class="form-group" style="text-align: center" v-if="machine">
-            <select class="" style="margin: 5px; margin-bottom: 15px; border-color: #b71009; border-radius: 8px; width: auto; padding: 10px" @click="handleWeight">
+            <select class="" style="margin: 5px; margin-bottom: 15px; border-color: #b71009; border-radius: 8px; width: auto; padding: 10px" @change="handleWeight">
                 <option selected disabled>Maschine ohne Gewichte</option>
-                <option v-for="i in 200" :key="i">{{i}} kg</option>
+                <option v-for="i in 200" :key="i">{{i}}</option>
             </select>
         </div>
         <hr>
@@ -110,7 +74,7 @@ export default {
             name: '',
             reps: 0,
             sets: '',
-            weight: '',
+            weight: 0,
             comment: '',
             mo: false,
             di: false,
@@ -121,7 +85,8 @@ export default {
             so: false,
             planed: false
         }
-    }, methods:{ testInput(){
+    }, methods:{
+        testInput(){
 
             console.log("Reps/Sets:")
             console.log(this.reps)
@@ -150,8 +115,10 @@ export default {
         //there is no v-model for select
             this.reps = event.target.value;
         }, handleSets(event){
+            //there is no v-model for select
         this.sets = event.target.value;
         },handleWeight(event){
+            //there is no v-model for select
         this.weight = event.target.value;
         }, clickDay(id){
 
@@ -200,23 +167,17 @@ export default {
 
 
 
-        }, generateIdReps(i){
-        return "reps_" + i
         },
         async safe() {
 
             this.testInput()
             if (document.getElementById("name").value == '') alert("Gib der Übung mindestens einen Namen!")
             else {
-                const baseUrl = "http://localhost:8081"
-                let end;
                 let data;
-                // eslint-disable-next-line no-unused-vars
                 let exercise_id;
 
                 if (this.mo || this.di || this.mi || this.don || this.fr || this.sa || this.so) this.planed = true
 
-                end = "/machinetraining"
                 data = {
                     name: this.name,
                     reps: this.reps,
@@ -233,7 +194,7 @@ export default {
                     planed: this.planed,
                     machineType: this.machine
                 }
-                const endpoint = baseUrl + end
+                const endpoint = process.env.VUE_APP_BASE_URL_BACKEND + "/training"
                 const requestOptions = {
                     method: 'POST',
                     headers: {
@@ -263,7 +224,7 @@ export default {
                     body: JSON.stringify(dataPut)
                 }
 
-                await fetch('http://localhost:8081/addExercise', requestOptionsPut)
+                await fetch(process.env.VUE_APP_BASE_URL_BACKEND+ '/addExercise', requestOptionsPut)
                     .then(response => response.json())
                     .then(data => {
                         console.log('Success:', data)
@@ -271,7 +232,7 @@ export default {
                     .catch(error => console.log('error', error))
 
 
-                // window.location = "http://localhost:8080"
+                window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/login"
             }
         }
         }
@@ -388,34 +349,9 @@ export default {
     }
 }
 
-.safeBtn{
-
-    margin-top: 5vh;
-    background-color: white;
-    border-radius: 20px;
-    border: 1px solid #4f9b8f;
-    padding: 10px;
-    cursor: pointer;
-
-}
-
 h4{
     margin-top: 6vh;
     color: #4f9b8f;
 }
-#newExersice{
-    text-align: center;
-    height: auto;
-    padding-bottom: 20px;
-    width: 40vw;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: white;
-    border-radius: 20px;
-    position: relative;
-    z-index: 1;
-
-}
-
 
 </style>

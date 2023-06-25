@@ -1,7 +1,7 @@
 <template>
     <NavBar></NavBar>
-    <EditBar @searchInput="changeInput($event)" @filterInputMachine="changeFilterMachine($event)" @filterInputUbung="changeFilterUbung($event)" @filterInputNotInUse="changeFilterNotInUse($event)" @filterInputInUse="changeFilterInUse($event)" @filterInputAllMachine="changeFilterAllMachine($event)" @filterInputAllUse="changeFilterAllUse($event)"></EditBar>
-    <AlleUebungen :exercises="this.exercises" :delete-exercise="false" :normal-list="false" :day="this.day" :search-input="this.input" :machine="this.machine" :in-use="this.inUse" :not-in-use="this.notInUse" :ubung="this.ubung" :all-machine="this.allMachine" :all-use="this.allUse"></AlleUebungen>
+    <EditBar @searchInput="changeInput($event)"></EditBar>
+    <AlleUebungen :exercises="this.exercises" :delete-exercise="false" :normal-list="false" :day="this.day" :search-input="this.input"></AlleUebungen>
 
 </template>
 
@@ -47,25 +47,27 @@ export default {
     }
 },
 mounted () {
+    if (localStorage.gymToken == null || localStorage.gymToken == undefined) window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/login"
+    else {
         //if we come to add a new exercise
-    this.day = this.$route.params.day;
+        this.day = this.$route.params.day;
 
-
-    const endpoint = 'http://localhost:8081/allsessions';
-    const requestOptions = {
-        method: 'GET',
-        redirect: 'follow',
-        headers: {
-            'token': localStorage.gymToken
+        const endpoint = process.env.VUE_APP_BASE_URL_BACKEND + '/allsessions';
+        const requestOptions = {
+            method: 'GET',
+            redirect: 'follow',
+            headers: {
+                'token': localStorage.gymToken
+            }
         }
-    }
 
-    fetch(endpoint, requestOptions)
-        .then(response => response.json())
-        .then(result => result.forEach(exercise => {
-            this.exercises.push(exercise)
-        }))
-        .catch(error => console.log('error', error))
+        fetch(endpoint, requestOptions)
+            .then(response => response.json())
+            .then(result => result.forEach(exercise => {
+                this.exercises.push(exercise)
+            }))
+            .catch(error => console.log('error', error))
+    }
 }
 }
 </script>

@@ -17,6 +17,8 @@ export default {
         return {
 
         }
+    }, mounted() {
+        if (localStorage.gymToken == null || localStorage.gymToken == undefined) window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/login"
     }
 }
 </script>

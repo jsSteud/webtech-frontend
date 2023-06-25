@@ -23,7 +23,12 @@ body{
 }
 
 </style>
-<script setup>
+<script >
+
+export default {
+
+
+}
 
 
 </script>

@@ -23,24 +23,26 @@ export default {
         }
     },
     mounted () {
-
-        const endpoint = 'http://localhost:8081/allsessions';
-        const requestOptions = {
-            method: 'GET',
-            redirect: 'follow',
-            headers: {
-                'token': localStorage.gymToken
+        if (localStorage.gymToken == null || localStorage.gymToken == undefined) window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/login"
+        else {
+            const url = process.env.VUE_APP_BASE_URL_BACKEND + "/allsessions";
+            const requestOptions = {
+                method: 'GET',
+                redirect: 'follow',
+                headers: {
+                    'token': localStorage.gymToken
+                }
             }
-        }
 
-        fetch(endpoint, requestOptions)
-            .then(response => response.json())
-            .then(result => result.forEach(exercise => {
-                this.exercises.push(exercise)
-            }))
-            .catch(error => console.log('error', error))
+            fetch(url, requestOptions)
+                .then(response => response.json())
+                .then(result => result.forEach(exercise => {
+                    this.exercises.push(exercise)
+                }))
+                .catch(error => console.log('error', error))
+        }
     }, methods:{
-    }
+    },
 }
 </script>
 

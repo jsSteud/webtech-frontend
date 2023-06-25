@@ -13,7 +13,6 @@
                     <div class="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
 
                         <form style="width: 23rem;">
-
                             <h3 v-if="!register" class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Log in</h3>
                             <h3 v-if="register" class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Registrieren</h3>
 
@@ -84,8 +83,7 @@ export default {
                  })
                  .catch(error => console.log('error', error))
 
-
-                window.location.href = "http://localhost:8080"
+                window.location.href =  process.env.VUE_APP_BASE_URL_FRONTEND +  "/exercises"
          }, async registerFunc(){
             let username = document.getElementById("form2Example18").value
             let password = document.getElementById("form2Example28").value
@@ -104,7 +102,7 @@ export default {
                 body: JSON.stringify(data)
             }
 
-            await fetch("http://localhost:8081/account", requestOptions)
+            await fetch(process.env.VUE_APP_BASE_URL_BACKEND + "/account", requestOptions)
                 .then(response => response.text())
                 .then(result => {
                     console.log(result)
@@ -120,13 +118,6 @@ export default {
 
 
 <style>
-.bg-image-vertical {
-    position: relative;
-    overflow: hidden;
-    background-repeat: no-repeat;
-    background-position: right center;
-    background-size: auto 100%;
-}
 
 @media (min-width: 1025px) {
     .h-custom-2 {

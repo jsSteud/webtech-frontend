@@ -2,8 +2,8 @@
 <template>
     <NavBar></NavBar>
     <h1 class="header"><span style="color:#4f9b8f;">Lösche</span> meine <span style="color:#4f9b8f;">Übungen.</span></h1>
-    <EditBar @searchInput="changeInput($event)" @filterInputMachine="changeFilterMachine($event)" @filterInputUbung="changeFilterUbung($event)" @filterInputNotInUse="changeFilterNotInUse($event)" @filterInputInUse="changeFilterInUse($event)" @filterInputAllMachine="changeFilterAllMachine($event)" @filterInputAllUse="changeFilterAllUse($event)"></EditBar>
-    <AlleUebungen :exercises="this.exercises" :delete-exercise=true :normalList=false :search-input="this.input" :machine="this.machine" :in-use="this.inUse" :not-in-use="this.notInUse" :ubung="this.ubung" :all-machine="this.allMachine" :all-use="this.allUse"></AlleUebungen>
+    <EditBar @searchInput="changeInput($event)" ></EditBar>
+    <AlleUebungen :exercises="this.exercises" :delete-exercise=true :normalList=false :search-input="this.input" ></AlleUebungen>
 </template>
 
 <script>
@@ -32,36 +32,26 @@ export default {
     }, methods: {
         changeInput(input){
             this.input = input
-        }, changeFilterMachine(machine){
-            this.machine = machine
-        }, changeFilterUbung(ubung) {
-            this.ubung = ubung
-        }, changeFilterNotInUse(notInUse){
-            this.notInUse = notInUse
-        }, changeFilterInUse(inUse){
-            this.inUse = inUse
-        }, changeFilterAllMachine(allMachine){
-            this.allMachine = allMachine
-        }, changeFilterAllUse(allUse){
-            this.allUse = allUse
         }
     },
     mounted () {
+        if (localStorage.gymToken == null || localStorage.gymToken == undefined) window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/login"
+        else {
 
-        const endpoint = 'http://localhost:8081/allsessions';
-        const requestOptions = {
-            method: 'GET',
-            redirect: 'follow'
+            const endpoint = process.env.VUE_APP_BASE_URL_BACKEND + '/allsessions';
+            const requestOptions = {
+                method: 'GET',
+                redirect: 'follow'
+            }
+
+            fetch(endpoint, requestOptions)
+                .then(response => response.json())
+                .then(result => result.forEach(exercise => {
+                    this.exercises.push(exercise)
+                }))
+                .catch(error => console.log('error', error))
         }
-
-        fetch(endpoint, requestOptions)
-            .then(response => response.json())
-            .then(result => result.forEach(exercise => {
-                this.exercises.push(exercise)
-            }))
-            .catch(error => console.log('error', error))
     }
-
 }
 
 </script>

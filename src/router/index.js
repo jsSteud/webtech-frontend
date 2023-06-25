@@ -8,13 +8,13 @@ import LoginForm from "@/components/LoginForm.vue";
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
+    path: '/plan',
+    name: 'plan',
     component: StartView
   },
   {
-    path: '/getall',
-    name: 'getall',
+    path: '/exercises',
+    name: 'exercises',
     component: AllView
   },
   {
