@@ -33,11 +33,11 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
 <!--                            TODO: BASE_URL-->
-                            <a class="nav-link" href="http://localhost:8080/exercises">Trainingplan</a>
+                            <a class="nav-link" href="http://localhost:8080/plan">Trainingplan</a>
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="http://localhost:8080/getall">Alle Übungen</a>
+                            <a class="nav-link" href="http://localhost:8080/exercises">Alle Übungen</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="http://localhost:8080/createnew">Neue Übung</a>
@@ -62,9 +62,19 @@ export  default {
 
         }
     }, methods: {
-        logout(){
-            localStorage.removeItem("gymToken")
+         async logout(){
+            await this.removeToken()
+             localStorage.removeItem("gymToken")
             window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/login"
+        }, async removeToken(){
+            console.log(localStorage.gymToken)
+            const requestOptions = {
+                method: 'PUT',
+                redirect: 'follow'
+            }
+
+            await fetch(process.env.VUE_APP_BASE_URL_BACKEND + "/removetoken" + "/" + localStorage.gymToken, requestOptions )
+                .catch(error => console.log(error))
         }
     }
 }

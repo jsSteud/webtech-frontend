@@ -206,7 +206,6 @@ export default {
                 await fetch(endpoint, requestOptions)
                     .then(response => response.json())
                     .then(data => {
-                        console.log('Success:', data)
                         exercise_id = data.id
                     })
                     .catch(error => console.log('error', error))
@@ -214,7 +213,7 @@ export default {
                 let dataPut = {
                     id: exercise_id
                 }
-                console.log(dataPut)
+
                 const requestOptionsPut = {
                     method: 'PUT',
                     headers: {
@@ -232,7 +231,7 @@ export default {
                     .catch(error => console.log('error', error))
 
 
-                window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/login"
+                // window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/plan"
             }
         }
         }

@@ -4,7 +4,7 @@
 <div class="test">
     <h1 class="header">Meine <span style="color:#b71009;">Übungen.</span></h1>
     <EditBar @searchInput="changeInput($event)"></EditBar>
-  <AlleUebungen :exercises="this.exercises" :search-input="this.input"></AlleUebungen>
+  <AlleUebungen :exercises="this.exercises" :search-input="this.input" :normal-list="true"></AlleUebungen>
 
 </div>
 </template>

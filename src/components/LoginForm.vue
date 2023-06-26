@@ -16,13 +16,22 @@
                             <h3 v-if="!register" class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Log in</h3>
                             <h3 v-if="register" class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Registrieren</h3>
 
-                            <div class="form-outline mb-4">
+                            <div v-if="!register" class="form-outline mb-4">
                                 <input type="email" id="form2Example18" class="form-control form-control-lg" @keyup.enter="login()" />
                                 <label class="form-label" for="form2Example18">Username</label>
                             </div>
 
-                            <div class="form-outline mb-4">
+                            <div v-if="!register" class="form-outline mb-4">
                                 <input type="password" id="form2Example28" class="form-control form-control-lg" @keyup.enter="login()"/>
+                                <label class="form-label" for="form2Example28">Password</label>
+                            </div>
+                            <div v-if="register" class="form-outline mb-4">
+                                <input type="email" id="form2Example18" class="form-control form-control-lg" @keyup.enter="registerFunc()" />
+                                <label class="form-label" for="form2Example18">Username</label>
+                            </div>
+
+                            <div v-if="register" class="form-outline mb-4">
+                                <input type="password" id="form2Example28" class="form-control form-control-lg" @keyup.enter="registerFunc()"/>
                                 <label class="form-label" for="form2Example28">Password</label>
                             </div>
 
@@ -80,10 +89,18 @@ export default {
                  .then(response => response.text())
                  .then(result => {
                      localStorage.gymToken = result;
+                     console.log(result)
+
+                     if (result == "wrongpassword") alert("Passwort falsch")
+                     else if(result == "userdoesntexist") {
+                             this.register = true
+                         alert("Nutzer gibt es nicht. Bitte registriere dich!")
+                     }
+                     else if(result != '')  window.location.href =  process.env.VUE_APP_BASE_URL_FRONTEND +  "/exercises"
+
                  })
                  .catch(error => console.log('error', error))
 
-                window.location.href =  process.env.VUE_APP_BASE_URL_FRONTEND +  "/exercises"
          }, async registerFunc(){
             let username = document.getElementById("form2Example18").value
             let password = document.getElementById("form2Example28").value
@@ -105,7 +122,9 @@ export default {
             await fetch(process.env.VUE_APP_BASE_URL_BACKEND + "/account", requestOptions)
                 .then(response => response.text())
                 .then(result => {
-                    console.log(result)
+                    if (result != '') this.login()
+                    else alert("Den Nutzernamen gibt es bereits!")
+
                 })
                 .catch(error => console.log('error', error))
 

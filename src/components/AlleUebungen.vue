@@ -102,7 +102,7 @@
 
         </tbody>
     </table>
-    <button class="btn btn-primary" @click="addNewExerciseToPlan()">Zum Plan hinzufügen</button>
+    <button v-if="!normalList" class="btn btn-primary" @click="addNewExerciseToPlan()">Zum Plan hinzufügen</button>
 </template>
 
 
