@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import AllView from '@/views/AllView.vue';
-import Navbar from '@/components/Navbar.vue';
+import NavBar from '@/components/NavBar.vue';
 
 describe('AllView', () => {
   it('renders the correct header text', () => {
@@ -10,9 +10,9 @@ describe('AllView', () => {
   });
 });
 
-describe('Navbar', () => {
+describe('NavBar', () => {
   it('should render all three nav items', () => {
-    const wrapper = mount(Navbar);
+    const wrapper = mount(NavBar);
 
     const bar = wrapper.find('#planLink')
     expect(bar.text()).toBe('Trainingsplan')
