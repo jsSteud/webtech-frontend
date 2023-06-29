@@ -22,7 +22,6 @@
     "lodash.uniqueid": "^4.0.1",
     "mdbvue": "^6.7.4",
     "node-fetch": "^2.6.11",
-    "sinon": "^15.2.0",
     "vue": "^3.3.4",
     "vue-burger-menu": "^2.0.5",
     "vue-router": "^4.0.3"

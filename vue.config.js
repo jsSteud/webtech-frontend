@@ -8,7 +8,5 @@ module.exports = {
     plugins: [
       new Dotenv()
     ]
-  },
-  publicPath: 'webtech-frontend'
+  }
 }
-

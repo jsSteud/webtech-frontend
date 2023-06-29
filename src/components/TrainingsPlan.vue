@@ -1,5 +1,4 @@
 <template>
-<!--    TODO: andere farbe für delete marker-->
     <button  class="btn btn-info" style="margin-left: 67vw; background-color: #14a2b8; border-color: #14a2b8; color: white" @click="edit()" v-if="hidden">Trainingsplan bearbeiten</button>
     <div class="btnDiv">
 

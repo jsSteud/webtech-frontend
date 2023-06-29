@@ -1,5 +1,4 @@
 <template>
-<!--    TODO: show if there are 0 exercises-->
     <table class="table align-middle mb-0 bg-white" style="margin-top: 3vh;">
         <thead class="bg-light">
         <tr>
@@ -248,6 +247,7 @@ export default {
 
         },
             executeFetch(data, type, endpoint){
+                //TODO: Delete type
             fetch(process.env.VUE_APP_BASE_URL_BACKEND + '/training/' + endpoint, {
                 method: type,
                 headers: {
@@ -269,9 +269,11 @@ export default {
                 method: 'DELETE'
             })
                 .then(response => {
+                    // Erfolgreiche Antwort
                     console.log(response);
                 })
                 .catch(error => {
+                    // Fehlerbehandlung
                     console.error(error);
                 });
         },
@@ -307,6 +309,7 @@ export default {
                 return data;
         },
             input(){
+                //TODO: hide safe button if nothing changes
             this.change = true;
 
         }
