@@ -231,7 +231,7 @@ export default {
                     .catch(error => console.log('error', error))
 
 
-                // window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/plan"
+                window.location = process.env.VUE_APP_BASE_URL_FRONTEND + "/exercises"
             }
         }
         }
