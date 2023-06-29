@@ -1,5 +1,4 @@
 # webtechproject - frontend
-test
 ### Informationen
 
 **Student**: Jascha Steudler
