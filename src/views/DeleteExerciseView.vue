@@ -1,4 +1,3 @@
-<!--TODO: solution with event-bus-->
 <template>
     <NavBar></NavBar>
     <h1 class="header"><span style="color:#4f9b8f;">Lösche</span> meine <span style="color:#4f9b8f;">Übungen.</span></h1>

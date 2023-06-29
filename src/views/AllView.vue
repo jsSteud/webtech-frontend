@@ -1,4 +1,3 @@
-<!--TODO: solution with event-bus-->
 <template>
 <NavBar></NavBar>
 <div class="test">

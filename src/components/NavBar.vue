@@ -36,10 +36,10 @@
                             <a id="planLink" class="nav-link" href="http://localhost:8080/plan">Trainingsplan</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="http://localhost:8080/exercises">Alle Übungen</a>
+                            <a id="exercisesLink" class="nav-link" href="http://localhost:8080/exercises">Alle Übungen</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="http://localhost:8080/createnew">Neue Übung</a>
+                            <a id="createLink" class="nav-link" href="http://localhost:8080/createnew">Neue Übung</a>
                         </li>
                     </ul>
                 </div>
