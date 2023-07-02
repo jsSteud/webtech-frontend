@@ -1,5 +1,6 @@
 <template>
     <NavBar></NavBar>
+    <h1 style="margin-top: 5vh" class="header">Füge eine neue <span style="color:#b71009;">Übung</span> hinzu.</h1>
     <CreateNew></CreateNew>
 </template>
 

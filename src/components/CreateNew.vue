@@ -2,8 +2,7 @@
 
     <div class="registration-form">
     <form>
-        <div class="form-icon">
-        </div>
+
         <div class="form-group">
             <input type="text" class="form-control item" id="name" placeholder="Name" v-model="name">
         </div>
@@ -53,7 +52,6 @@
     </form>
 
     </div>
-
 
 </template>
 
@@ -351,6 +349,11 @@ export default {
 h4{
     margin-top: 6vh;
     color: #4f9b8f;
+}
+
+#newSVG{
+    position: absolute;
+    right: 0;
 }
 
 </style>

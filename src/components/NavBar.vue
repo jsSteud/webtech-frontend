@@ -32,19 +32,19 @@
                     <!-- Left links -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-<!--                            TODO: BASE_URL-->
-                            <a id="planLink" class="nav-link" href="http://localhost:8080/plan">Trainingsplan</a>
+                            <a id="planLink" class="nav-link" :href="this.frontendURL() + '/plan'">Trainingsplan</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="http://localhost:8080/exercises">Alle Übungen</a>
+                            <a class="nav-link" :href="this.frontendURL() + '/exercises'">Alle Übungen</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="http://localhost:8080/createnew">Neue Übung</a>
+                            <a class="nav-link" :href="this.frontendURL() + '/createnew'">Neue Übung</a>
                         </li>
                     </ul>
                 </div>
 
             </div>
+
             <a style="margin-right: 5vw; color: cornflowerblue; text-decoration: underline; cursor: pointer" @click="logout()">ausloggen</a>
         </nav>
     </nav>
@@ -74,7 +74,9 @@ export  default {
 
             await fetch(process.env.VUE_APP_BASE_URL_BACKEND + "/removetoken" + "/" + localStorage.gymToken, requestOptions )
                 .catch(error => console.log(error))
-        }
+        }, frontendURL(){
+         return process.env.VUE_APP_BASE_URL_FRONTEND
+         }
     }
 }
 </script>

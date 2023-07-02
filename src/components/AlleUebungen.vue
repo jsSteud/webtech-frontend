@@ -1,5 +1,12 @@
 <template>
-    <table class="table align-middle mb-0 bg-white" style="margin-top: 3vh;">
+
+    <div v-if="!this.normalList && !this.hideDisclaimer" class="disclaimerList">
+        <i class="gg-info" style="margin-top: auto; margin-bottom: auto; margin-left: 1vw"></i>
+        <p style="margin-bottom: auto; margin-bottom: auto">Klicke einfach auf einen Namen, um die Übung zum Hinzufügen zu markieren.</p>
+        <i class="gg-close" style="cursor:pointer;" @click="hideDisclaimer = true"></i>
+    </div>
+
+    <table class="table align-middle mb-0 bg-white" style="margin-top: 3vh; max-width: 80vw; margin-left: 10vw">
         <thead class="bg-light">
         <tr>
             <th>Name</th>
@@ -17,15 +24,8 @@
             <td  @click="markExersice(exercise.id)">
 
                 <div class="d-flex align-items-center" >
-                    <input class="rounded-circle" v-if="markArr.includes(exercise.id)" type="checkbox" value="" id="flexCheckChecked" style="accent-color: #4f9b8f; width: 45px; height: 45px" checked/>
-                    <img
-                        v-if="!markArr.includes(exercise.id)"
-                        src="@/assets/liegestutze.png"
-                        alt=""
-                        style="width: 45px; height: 45px"
-                        class="rounded-circle"
-                    />
-                    <div class="ms-3" style="padding-left: 1vw; cursor: pointer">
+                    <input class="rounded-circle" v-if="markArr.includes(exercise.id) " type="checkbox" value="" id="flexCheckChecked" style="accent-color: #4f9b8f; width: 45px; height: 45px" checked/>
+                    <div class="ms-3" style="cursor: pointer">
                         <p v-if="!clickedDArr.includes(exercise.id)" class="fw-bold mb-1">{{exercise.name}}</p>
                         <textarea class="form-control" v-if="clickedDArr.includes(exercise.id)" :value="exercise.name" style="height: auto" id="newName"></textarea>
 
@@ -53,7 +53,8 @@
 
 
             <td>
-                <p v-if="!exercise.machineType && !clickedDArr.includes(exercise.id)"><b>{{exercise.sets}} á {{ exercise.reps}}</b></p>
+                <p v-if="!exercise.machineType && !clickedDArr.includes(exercise.id) && exercise.sets == 0 && exercise.reps == 0"><b>---</b></p>
+                <p v-else-if="!exercise.machineType && !clickedDArr.includes(exercise.id)"><b>{{exercise.sets}} á {{ exercise.reps}}</b></p>
                 <p v-else-if="exercise.machineType && !clickedDArr.includes(exercise.id)"><b>{{exercise.sets}} á {{ exercise.reps}}</b> mit <b> {{exercise.weight}} kg </b></p>
 
                 <select v-if="clickedDArr.includes(exercise.id)" id="setsField">
@@ -84,7 +85,8 @@
 
 
             <td >
-                <p v-if="!clickedDArr.includes(exercise.id)">{{exercise.comment}}</p>
+                <p v-if="!clickedDArr.includes(exercise.id) && exercise.comment !=  null"><b>---</b></p>
+                <p v-else-if="!clickedDArr.includes(exercise.id)">{{exercise.comment}}</p>
                 <textarea class="form-control" v-if="clickedDArr.includes(exercise.id)" :value="exercise.comment" style="height: auto" id="commentField"></textarea>
             </td>
 
@@ -102,11 +104,13 @@
 
         </tbody>
     </table>
-    <button v-if="!normalList" class="btn btn-primary" @click="addNewExerciseToPlan()">Zum Plan hinzufügen</button>
+    <button v-if="!normalList" class="btn btn-primary" @click="addNewExerciseToPlan()" style="margin-left: 10vw; margin-top: 4vh">Zum Plan hinzufügen</button>
+    <h5 id="keineUbung" v-if="this.filteredList.length == 0">Keine Übung bissher.</h5>
 </template>
 
 
 <script>
+
 
 let clickedDiv = []
 
@@ -141,7 +145,8 @@ export default {
             sa: false,
             so: false,
             exercisesChangable: this.exercises,
-            editClicked: false
+            editClicked: false,
+            hideDisclaimer: false
         }
     },
     methods: {
@@ -166,11 +171,13 @@ export default {
                 else this.editClicked = true
 
             }, markExersice(index){
-            if(this.markArr.includes(index)){
-                var array = this.markArr.filter(item => item !== index);
-                this.markArr = array;
-            } else {
-                this.markArr.push(index)
+            if (!this.normalList) {
+                if (this.markArr.includes(index)) {
+                    var array = this.markArr.filter(item => item !== index);
+                    this.markArr = array;
+                } else {
+                    this.markArr.push(index)
+                }
             }
         },
             addNewExerciseToPlan() {
@@ -245,9 +252,10 @@ export default {
                 let data = this.generateData(id);
                 this.executeFetch(data, 'PUT', id);
 
+                this.edit(id)
+
         },
             executeFetch(data, type, endpoint){
-                //TODO: Delete type
             fetch(process.env.VUE_APP_BASE_URL_BACKEND + '/training/' + endpoint, {
                 method: type,
                 headers: {
@@ -309,11 +317,15 @@ export default {
                 return data;
         },
             input(){
-                //TODO: hide safe button if nothing changes
             this.change = true;
 
         }
         }, computed: {
+        backendURL() {
+            return process.env.VUE_APP_BASE_URL_BACKEND
+        }, frontendURL(){
+            return process.env.VUE_APP_BASE_URL_FRONTEND
+        },
         filteredList() {
             return this.exercisesChangable.filter(exercise => {
                 //first filter search bar input
@@ -362,5 +374,27 @@ td{
     padding: 5px;
 }
 
+#keineUbung{
+    text-align: center;
+    margin-top: 7vh;
+    color: darkgrey;
+}
+
+.disclaimerList{
+    margin-top: 3vh;
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    height: auto;
+    max-width: 40vw;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: cornflowerblue;
+    color: white;
+    border-radius: 3px;
+    position: relative;
+    z-index: 3;
+    padding: 6px;
+}
 
 </style>

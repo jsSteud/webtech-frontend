@@ -1,6 +1,3 @@
-<!--
-TODO: Base URLS in ENV VAR-->
-
 <template>
 
   <router-view/>
