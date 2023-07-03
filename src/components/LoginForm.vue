@@ -85,7 +85,7 @@ export default {
                  }
              }
 
-             await fetch("http://localhost:8081/login", requestOptions)
+             await fetch(process.env.VUE_APP_BASE_URL_BACKEND + "/login", requestOptions)
                  .then(response => response.text())
                  .then(result => {
                      localStorage.gymToken = result;
