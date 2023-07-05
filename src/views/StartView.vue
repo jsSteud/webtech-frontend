@@ -57,9 +57,4 @@ export default {
     margin-top: 50px;
 }
 
-body{
-    background-size: cover;
-    background-color: black;
-
-}
 </style>
