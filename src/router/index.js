@@ -5,8 +5,10 @@ import AddView from "@/views/AddView.vue";
 import AddToPlanView from "@/views/AddToPlanView.vue";
 import DeleteExerciseView from "@/views/DeleteExerciseView.vue";
 import LoginForm from "@/components/LoginForm.vue";
+import App from "@/App.vue";
 
 const routes = [
+
   {
     path: '/plan',
     name: 'plan',
@@ -33,11 +35,14 @@ const routes = [
   path: '/login',
     name: 'login',
   component: LoginForm
+  },{
+    path: '/:pathMatch(.*)*',
+    component: App
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
 })
 
