@@ -85,7 +85,7 @@
 
 
             <td >
-                <p v-if="!clickedDArr.includes(exercise.id) && exercise.comment ==  null"><b>---</b></p>
+                <p v-if="!clickedDArr.includes(exercise.id) && exercise.comment ==  ''"><b>---</b></p>
                 <p v-else-if="!clickedDArr.includes(exercise.id)">{{exercise.comment}}</p>
                 <textarea class="form-control" v-if="clickedDArr.includes(exercise.id)" :value="exercise.comment" style="height: auto" id="commentField"></textarea>
             </td>
