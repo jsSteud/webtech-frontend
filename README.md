@@ -1,4 +1,5 @@
-# webtechproject - frontend
+# webtechproject - backend
+
 ### Informationen
 
 **Student**: Jascha Steudler
@@ -18,25 +19,25 @@ Zugehöriges Backend: https://github.com/jsSteud/webtechproject
 ## How to Log In / Sign up unter ``/login``
 
 1. Registrieren
-2. Alternative Credential:
 
-   ``username: testuser``
+   **oder**
+2. Als Alternative gibt es einen Testuser -> bitte bei mir anfragen
 
-   ``password: testpassword``
+
 
 ## How to use the application
 
 Es gibt 3 Pfade:
 1. ``/plan``
-    2. Plan
-    3. Übungen zum Plan hinzügen
-    4. Übungen aus Plan entfernen
+   2. Plan
+   3. Übungen zum Plan hinzügen
+   4. Übungen aus Plan entfernen
 2. ``/exercises``
-    3. Übungen bearbeiten
-        4. Name, Kommentar, Sets, Gewichte etc....
-    5. Übungen löschen
+   3. Übungen bearbeiten
+      4. Name, Kommentar, Sets, Gewichte etc....
+   5. Übungen löschen
 3. ``/createnew``
-    4. Neue Übung erstellen
+   4. Neue Übung erstellen
 
 Alle sind über die NavBar zu erreichen.
 
